@@ -1,5 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  webpack: {
+    test: /\.svg$/,
+    use: [
+      {
+        loader: "@svgr/webpack",
+        options: {
+          native: true,
+        },
+      },
+    ],
+  },
   images: {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
