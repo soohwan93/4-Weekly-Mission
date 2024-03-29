@@ -32,8 +32,11 @@ const config: Config = {
         "landing-c4-to": "rgba(82, 136, 133, 0.22)",
         "contents-p": "#6b6b6b",
         "search-link-input": "#f5f5f5",
+        modal: "rgba(0, 0, 0, 0.4)",
       },
-      backgroundSize: {},
+      gridTemplateColumns: {
+        "link-container": "repeat(auto-fill, 340px)",
+      },
     },
     screens: {
       "1920px": { raw: "(min-width: 1920px)" },
@@ -41,6 +44,7 @@ const config: Config = {
       "1124px": { raw: "(max-width: 1124px)" },
       "869px": { raw: "(max-width: 869px)" },
       "767px": { raw: "(max-width: 767px)" },
+      "390px": { raw: "(max-width: 390px)" },
     },
   },
   plugins: [],

@@ -77,7 +77,9 @@
       format("truetype");
   font-display: swap;
 }
-
+* {
+  box-sizing: border-box;
+}
 body {
   margin: 0;
   font-family: Pretendard, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
