@@ -6,15 +6,10 @@ const acme = Acme({
   weight: "400",
   subsets: ["latin"],
 });
-function Footer({
-  footerTarget,
-}: {
-  footerTarget: React.RefObject<HTMLDivElement>;
-}) {
+function Footer() {
   return (
     <footer className={`flex flex-col items-center pt-32 767px:pt-[102.5px]`}>
       <div
-        ref={footerTarget}
         className={`flex h-40 px-24 pt-8 pb-16 flex-col items-center shrink-0 self-stretch bg-black 767px:px-8 767px:pt-8 767px:pb-16`}
       >
         <div
