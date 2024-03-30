@@ -1,5 +1,7 @@
 const ERROR_MSG = "데이터 불러오기 실패";
 
+const checkEmailApiURL = "https://bootcamp-api.codeit.kr/api/check-email";
+
 const sharedUserSampleApiURL = "https://bootcamp-api.codeit.kr/api/users/1";
 const sharedFolderSampleApiURL =
   "https://bootcamp-api.codeit.kr/api/sample/folder";
