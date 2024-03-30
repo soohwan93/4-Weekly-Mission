@@ -27,7 +27,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "tailwind.config.ts",
-    "postcss.config.js"
+    "postcss.config.js",
+    "app/components/KaKaoShare.jsx"
   ],
   "exclude": ["node_modules"]
 }
