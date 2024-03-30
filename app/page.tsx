@@ -19,7 +19,7 @@ export default function Home() {
           <span>쉽게 저장하고 관리해 보세요</span>
         </div>
         <Link
-          className="text-lg font-semibold  rounded-lg bg-gradient-to-r from-[0.12%] from-[#6d6afe] to-[101.84%] to-login-to text-white flex w-[350px] py-4 px-5 justify-center items-center gap-10px 767px:w-[200px] 767px:px-4 767px:py-10px"
+          className="text-lg font-semibold  rounded-lg bg-gradient-to-r from-[0.12%] from-[#6d6afe] to-[101.84%] to-[#6ae3fe] text-white flex w-[350px] py-4 px-5 justify-center items-center gap-10px 767px:w-[200px] 767px:px-4 767px:py-10px"
           href="/signup"
         >
           링크 추가하기
