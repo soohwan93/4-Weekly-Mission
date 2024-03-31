@@ -1,13 +1,7 @@
 import stopPropagation from "@/util/stopPropagation";
 import closeImg from "@/public/modal-close.png";
 import { ReactNode } from "react";
-export interface ModalProps extends OnModalProps {
-  children: ReactNode;
-}
-
-export interface OnModalProps {
-  onModal: (type?: string, link?: string) => void;
-}
+import { ModalProps } from "../folder/page";
 
 function Modal({ onModal, children }: ModalProps) {
   return (

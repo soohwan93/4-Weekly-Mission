@@ -1,8 +1,9 @@
 import shareImg from "@/public/share.png";
 import editNameImg from "@/public/pen.png";
 import deleteImg from "@/public/delete.png";
-import { OnModalProps } from "./Modal";
+
 import { MODAL_TYPE } from "@/util/staticValue";
+import { OnModalProps } from "../folder/page";
 
 interface FolderTitleProps extends OnModalProps {
   folderTitleName: string;

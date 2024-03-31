@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import useSearchInput, {
   SearchListApiProps,
 } from "@/util/hooks/useSearchInput";
 import { useUserProfile } from "@/util/ContextProvider";
-import { ALL_LIST_BUTTON_ID } from "@/util/staticValue";
+import { ALL_LIST_BUTTON_ID, MODAL_TYPE } from "@/util/staticValue";
 import { getFolderList, getFolderListData } from "@/util/api";
 import ModalPortal from "@/util/ModalPortal";
 import Modal from "@/app/components/Modal";
@@ -36,6 +36,14 @@ export interface FolderListProps {
   link: { count: number };
   name: string;
   user_id: number;
+}
+
+export interface ModalProps extends OnModalProps {
+  children: ReactNode;
+}
+
+export interface OnModalProps {
+  onModal: (type?: string, link?: string) => void;
 }
 
 const Folder = () => {
@@ -83,14 +91,8 @@ const Folder = () => {
 
   const handleModal = (type?: string, link?: string) => {
     setIsModal(!isModal);
-
-    if (type) {
-      setModalType(type);
-    }
-
-    if (link) {
-      setLinkUrl(link);
-    }
+    type && setModalType(type);
+    link && setLinkUrl(link);
   };
 
   useEffect(() => {
