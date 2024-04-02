@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
 import React from "react";
-import useSearchInput from "@/util/hooks/useSearchInput";
-import { LINKS_INITIAL_DATA } from "@/util/staticValue";
+import { notFound } from "next/navigation";
 import { getSharedFolderSample } from "@/util/api";
-import LinkContainer from "../../components/LinkContainer";
-import SearchLinkInput from "../../components/SearchLinkInput";
 import OwnerProfile from "@/components/OwnerProfile";
 import SharedMain from "@/components/SharedMain";
 
@@ -38,10 +34,10 @@ interface OwnerProfileData {
 }
 
 const Shared = async () => {
-  const result = await getSharedFolderSample();
-  if (!result) return;
+  const sharedFolderSampleResult = await getSharedFolderSample();
+  if (!sharedFolderSampleResult) return notFound();
 
-  const ownerProfile = result.folder;
+  const ownerProfile = sharedFolderSampleResult.folder;
 
   const { links, name, owner }: OwnerProfileData = ownerProfile;
 
