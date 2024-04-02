@@ -5,8 +5,8 @@ import useSearchInput from "@/util/hooks/useSearchInput";
 import { LINKS_INITIAL_DATA } from "@/util/staticValue";
 import { getSharedFolderSample } from "@/util/api";
 import closeImg from "@/public/modal-close.png";
-import LinkContainer from "../components/LinkContainer";
-import SearchLinkInput from "../components/SearchLinkInput";
+import LinkContainer from "../../components/LinkContainer";
+import SearchLinkInput from "../../components/SearchLinkInput";
 
 export interface FolderApiData {
   count: number;

@@ -3,7 +3,7 @@ import editNameImg from "@/public/pen.png";
 import deleteImg from "@/public/delete.png";
 
 import { MODAL_TYPE } from "@/util/staticValue";
-import { OnModalProps } from "../folder/page";
+import { OnModalProps } from "../app/folder/page";
 
 interface FolderTitleProps extends OnModalProps {
   folderTitleName: string;

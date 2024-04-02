@@ -12,7 +12,7 @@ const folderListDataApiURL =
   "https://bootcamp-api.codeit.kr/api/users/1/links?folderId=";
 
 async function getApiResponse(url: string, errorMessage: string) {
-  const response = await fetch(url, { cache: "force-cache" });
+  const response = await fetch(url);
   if (!response?.ok) {
     return new Error(errorMessage);
   }

@@ -1,18 +1,13 @@
-"use client";
 import "./globals.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import { ContextProvider } from "@/util/ContextProvider";
-import { usePathname } from "next/navigation";
 import Script from "next/script";
+import { ContextProvider } from "@/util/ContextProvider";
+import Providers from "../components/Providers";
 
-interface RootLayoutProps {
+export interface ChildernProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
-  const pathName = usePathname();
-  const isApplyLayout = !pathName.includes("sign");
+export default function RootLayout({ children }: ChildernProps) {
   return (
     <html lang="ko">
       <head>
@@ -58,12 +53,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <title>Linkbrary</title>
       </head>
       <body className="font-Pretendard">
-        <ContextProvider>
-          {isApplyLayout && <Header />}
+        <Providers>
           {children}
-          {isApplyLayout && <Footer />}
           <div id="modal-root" />
-        </ContextProvider>
+        </Providers>
       </body>
     </html>
   );

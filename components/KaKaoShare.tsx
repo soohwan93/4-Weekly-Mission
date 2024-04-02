@@ -1,5 +1,3 @@
-"use client";
-import { useEffect } from "react";
 import ShareImgDiv from "./ShareImgDiv";
 
 declare global {
@@ -16,10 +14,8 @@ export interface ShareProps {
 }
 
 function KaKaoShare({ src, text, alt, shareUrl }: ShareProps) {
-  useEffect(() => {
-    window.Kakao.cleanup();
-    window.Kakao.init("e9dde7fd5c20bdfdf100d47b1f8da3d3");
-  }, []);
+  window.Kakao.cleanup();
+  window.Kakao.init("e9dde7fd5c20bdfdf100d47b1f8da3d3");
 
   const handleClickKakaoShare = () => {
     window.Kakao.Share.sendDefault({

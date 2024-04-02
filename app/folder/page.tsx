@@ -7,19 +7,19 @@ import { useUserProfile } from "@/util/ContextProvider";
 import { ALL_LIST_BUTTON_ID, MODAL_TYPE } from "@/util/staticValue";
 import { getFolderList, getFolderListData } from "@/util/api";
 import ModalPortal from "@/util/ModalPortal";
-import Modal from "@/app/components/Modal";
+import Modal from "@/components/Modal";
 import FolderButton, {
   handleButtonListItemClick,
-} from "../components/FolderButton";
-import AddLinkInput from "../components/AddLinkInput";
-import SearchLinkInput from "../components/SearchLinkInput";
-import FolderTitle from "../components/FolderTitle";
-import FolderListItem from "../components/FolderListItem";
-import ModalShare from "../components/ModalShare";
-import ModalEdit from "../components/ModalEdit";
-import ModalDeleteFolder from "../components/ModalDeleteFolder";
-import ModalDeleteLink from "../components/ModalDeleteLink";
-import ModalAddFolder from "../components/ModalAddFolder";
+} from "../../components/FolderButton";
+import AddLinkInput from "../../components/AddLinkInput";
+import SearchLinkInput from "../../components/SearchLinkInput";
+import FolderTitle from "../../components/FolderTitle";
+import FolderListItem from "../../components/FolderListItem";
+import ModalShare from "../../components/ModalShare";
+import ModalEdit from "../../components/ModalEdit";
+import ModalDeleteFolder from "../../components/ModalDeleteFolder";
+import ModalDeleteLink from "../../components/ModalDeleteLink";
+import ModalAddFolder from "../../components/ModalAddFolder";
 
 export interface FolderListApiItem extends SearchListApiProps {
   id: number;

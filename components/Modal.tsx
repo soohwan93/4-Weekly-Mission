@@ -1,7 +1,7 @@
 import stopPropagation from "@/util/stopPropagation";
 import closeImg from "@/public/modal-close.png";
 import { ReactNode } from "react";
-import { ModalProps } from "../folder/page";
+import { ModalProps } from "../app/folder/page";
 
 function Modal({ onModal, children }: ModalProps) {
   return (
