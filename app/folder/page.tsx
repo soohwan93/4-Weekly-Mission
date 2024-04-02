@@ -4,22 +4,22 @@ import useSearchInput, {
   SearchListApiProps,
 } from "@/util/hooks/useSearchInput";
 import { useUserProfile } from "@/util/ContextProvider";
-import { ALL_LIST_BUTTON_ID, MODAL_TYPE } from "@/util/staticValue";
+import { ALL_LIST_BUTTON_ID } from "@/util/staticValue";
 import { getFolderList, getFolderListData } from "@/util/api";
 import ModalPortal from "@/util/ModalPortal";
 import Modal from "@/components/Modal";
 import FolderButton, {
   handleButtonListItemClick,
-} from "../../components/FolderButton";
-import AddLinkInput from "../../components/AddLinkInput";
-import SearchLinkInput from "../../components/SearchLinkInput";
-import FolderTitle from "../../components/FolderTitle";
-import FolderListItem from "../../components/FolderListItem";
-import ModalShare from "../../components/ModalShare";
-import ModalEdit from "../../components/ModalEdit";
-import ModalDeleteFolder from "../../components/ModalDeleteFolder";
-import ModalDeleteLink from "../../components/ModalDeleteLink";
-import ModalAddFolder from "../../components/ModalAddFolder";
+} from "@/components/FolderButton";
+import AddLinkInput from "@/components/AddLinkInput";
+import SearchLinkInput from "@/components/SearchLinkInput";
+import FolderTitle from "@/components/FolderTitle";
+import FolderListItem from "@/components/FolderListItem";
+import ModalShare from "@/components/ModalShare";
+import ModalEdit from "@/components/ModalEdit";
+import ModalDeleteFolder from "@/components/ModalDeleteFolder";
+import ModalDeleteLink from "@/components/ModalDeleteLink";
+import ModalAddFolder from "@/components/ModalAddFolder";
 
 export interface FolderListApiItem extends SearchListApiProps {
   id: number;
@@ -49,7 +49,8 @@ export interface OnModalProps {
 const Folder = () => {
   const footerTarget = useRef<HTMLDivElement>(null);
   const [folderListItem, setFolderListItem] = useState<FolderListApiItem[]>([]);
-  const [folderList, setFolderList] = useState<FolderListProps[]>([]);
+  const [folderListLoading, setIsFolderListLoading] = useState(true);
+  const [folderList, setFolderList] = useState([]);
   const {
     filterdItem,
     handleCloseClick,
@@ -60,13 +61,13 @@ const Folder = () => {
     closeButtonRef,
   } = useSearchInput<FolderListApiItem>(folderListItem);
   const userProfile = useUserProfile();
-  const [linkUrl, setLinkUrl] = useState<string>("");
-  const [isModal, setIsModal] = useState<boolean>(false);
-  const [modalType, setModalType] = useState<string>("");
+  const [linkUrl, setLinkUrl] = useState("");
+  const [isModal, setIsModal] = useState(false);
+  const [modalType, setModalType] = useState("");
   const [isSelectedAll, setIsSelectedAll] =
     useState<typeof ALL_LIST_BUTTON_ID>(ALL_LIST_BUTTON_ID);
-  const [folderTitleName, setFolderTitleName] = useState<string>("");
-  const [clickedButtonId, setClickedButtonId] = useState<number>(0);
+  const [folderTitleName, setFolderTitleName] = useState("");
+  const [clickedButtonId, setClickedButtonId] = useState(0);
   const handleButtonListItemClick: handleButtonListItemClick = async (
     id,
     name
@@ -82,11 +83,12 @@ const Folder = () => {
     setFolderListItem(data);
   };
 
-  const handleFolderList = async () => {
+  const getFolderListApi = async () => {
+    setIsFolderListLoading(true);
     const result = await getFolderList();
     if (!result) return;
-    const data = result.data;
-    setFolderList(data);
+    setFolderList(result.data);
+    setIsFolderListLoading(false);
   };
 
   const handleModal = (type?: string, link?: string) => {
@@ -96,7 +98,7 @@ const Folder = () => {
   };
 
   useEffect(() => {
-    handleFolderList();
+    getFolderListApi();
     handleButtonListItemClick(0, "전체");
   }, []);
 
@@ -113,7 +115,7 @@ const Folder = () => {
             inputValue={inputValue}
             isFocus={isFocus}
           />
-          {folderList?.length > 0 ? (
+          {folderList.length > 0 ? (
             <>
               <FolderButton
                 handleButtonListItemClick={handleButtonListItemClick}
@@ -134,7 +136,7 @@ const Folder = () => {
               />
             </>
           ) : (
-            <div>저장된 폴더가 없습니다</div>
+            <>{!folderListLoading && <div>저장된 폴더가 없습니다</div>}</>
           )}
         </div>
       </div>
