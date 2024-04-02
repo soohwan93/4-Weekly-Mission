@@ -14,12 +14,14 @@ interface SignInputProps {
   path: string;
   focus?: boolean;
   labelText: string;
+  placeholderText: string;
   type: string;
 }
 const SignInput = ({
   emailRef,
   passwordRef,
   checkPasswordRef,
+  placeholderText,
   path,
   focus,
   labelText,
@@ -88,7 +90,7 @@ const SignInput = ({
       )}
       <input
         onBlur={handleInputBlur}
-        placeholder={labelText}
+        placeholder={placeholderText}
         ref={emailRef || (checkPasswordRef ? checkPasswordRef : passwordRef)}
         className={`${
           errorMsg !== "" && `border-[#ff5b56] border-solid`

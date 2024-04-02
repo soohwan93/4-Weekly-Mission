@@ -1,7 +1,12 @@
 "use client";
 import React, { FormEvent, useRef } from "react";
 import SignInput from "./SignInput";
-import { BUTTON_TEXT, INPUT_LABEL_TEXT, INPUT_TYPE } from "@/util/staticValue";
+import {
+  BUTTON_TEXT,
+  INPUT_LABEL_TEXT,
+  INPUT_SIGNIN_PLACEHOLDER_TEXT,
+  INPUT_TYPE,
+} from "@/util/staticValue";
 import SignForm from "./SignForm";
 import SignButton from "./SignButton";
 export type SignUrlProp = { pathUrl: string };
@@ -18,13 +23,15 @@ const SigninForm = ({ pathUrl }: SignUrlProp) => {
         focus
         path={pathUrl}
         emailRef={emailRef}
-        labelText={INPUT_LABEL_TEXT.inputEmailText}
+        labelText={INPUT_LABEL_TEXT.email}
+        placeholderText={INPUT_SIGNIN_PLACEHOLDER_TEXT.email}
         type={INPUT_TYPE.email}
       />
       <SignInput
         path={pathUrl}
         passwordRef={passwordRef}
-        labelText={INPUT_LABEL_TEXT.inputPasswordText}
+        labelText={INPUT_LABEL_TEXT.password}
+        placeholderText={INPUT_SIGNIN_PLACEHOLDER_TEXT.password}
         type={INPUT_TYPE.password}
       />
       <SignButton text={BUTTON_TEXT.signin} />

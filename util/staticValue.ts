@@ -1,9 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
 
 export const INPUT_LABEL_TEXT = {
-  inputEmailText: "이메일",
-  inputPasswordText: "비밀번호",
-  inputCheckPasswordText: "비밀번호 확인",
+  email: "이메일",
+  password: "비밀번호",
+  passwordCheck: "비밀번호 확인",
+};
+
+export const INPUT_SIGNIN_PLACEHOLDER_TEXT = {
+  email: "이메일을 입력해 주세요.",
+  password: "비밀번호를 입력해 주세요.",
+};
+export const INPUT_SIGNUP_PLACEHOLDER_TEXT = {
+  email: "이메일을 입력해 주세요.",
+  password: "영문, 숫자를 조합해 8자 이상 입력해 주세요.",
+  passwordCheck: "비밀번호와 일치하는 값을 입력해 주세요.",
 };
 
 export const BUTTON_TEXT = {
