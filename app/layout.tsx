@@ -1,6 +1,7 @@
 import "./globals.css";
 import Script from "next/script";
-import Providers from "../components/Providers";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export interface ChildernProps {
   children: React.ReactNode;
@@ -50,10 +51,10 @@ export default function RootLayout({ children }: ChildernProps) {
         <title>Linkbrary</title>
       </head>
       <body className="font-Pretendard">
-        <Providers>
-          {children}
-          <div id="modal-root" />
-        </Providers>
+        <Header />
+        {children}
+        <Footer />
+        <div id="modal-root" />
       </body>
     </html>
   );
