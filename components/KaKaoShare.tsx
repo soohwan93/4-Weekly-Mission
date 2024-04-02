@@ -1,3 +1,4 @@
+import Script from "next/script";
 import ShareImgDiv from "./ShareImgDiv";
 
 declare global {
@@ -14,9 +15,6 @@ export interface ShareProps {
 }
 
 function KaKaoShare({ src, text, alt, shareUrl }: ShareProps) {
-  window.Kakao.cleanup();
-  window.Kakao.init("e9dde7fd5c20bdfdf100d47b1f8da3d3");
-
   const handleClickKakaoShare = () => {
     window.Kakao.Share.sendDefault({
       objectType: "feed",
@@ -42,12 +40,24 @@ function KaKaoShare({ src, text, alt, shareUrl }: ShareProps) {
     });
   };
   return (
-    <ShareImgDiv
-      src={src}
-      alt={alt}
-      text={text}
-      handleClick={handleClickKakaoShare}
-    />
+    <>
+      <Script
+        src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js"
+        integrity="sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01"
+        crossOrigin="anonymous"
+        onLoad={() => {
+          window.Kakao.cleanup();
+          window.Kakao.init("e9dde7fd5c20bdfdf100d47b1f8da3d3");
+        }}
+        defer
+      />
+      <ShareImgDiv
+        src={src}
+        alt={alt}
+        text={text}
+        handleClick={handleClickKakaoShare}
+      />
+    </>
   );
 }
 

@@ -41,13 +41,6 @@ export default function RootLayout({ children }: ChildernProps) {
           name="twitter:description"
           content="세상의 모든 정보를 쉽게 저장하고 관리해 보세요"
         />
-        {/* 카카오톡 공유하기 설정 */}
-        <Script
-          src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js"
-          integrity="sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01"
-          crossOrigin="anonymous"
-          defer
-        />
         <title>Linkbrary</title>
       </head>
       <body className="font-Pretendard">
