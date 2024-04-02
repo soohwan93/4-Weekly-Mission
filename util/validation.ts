@@ -65,9 +65,7 @@ export const validateSigninPasswordInput = (password: string) =>
 
 //비밀번호 유효성 검사(회원가입)
 export const validateSignupPasswordInput = (password: string) => {
-  if (!password) {
-    return PASSWORD_VALIDATION_TEXT.empty;
-  } else if (!isPasswordValid(password)) {
+  if (!isPasswordValid(password)) {
     return PASSWORD_VALIDATION_TEXT.falsy;
   }
   return "";
@@ -78,9 +76,7 @@ export const validateSignupPasswordChkInput = (
   value: string,
   prevValue: string
 ) => {
-  if (!value) {
-    return PASSWORD_VALIDATION_TEXT.empty;
-  } else if (value !== prevValue) {
+  if (value !== prevValue) {
     return PASSWORD_VALIDATION_TEXT.dismatch;
   }
   return "";
