@@ -1,6 +1,5 @@
 import "./globals.css";
 import Script from "next/script";
-import { ContextProvider } from "@/util/ContextProvider";
 import Providers from "../components/Providers";
 
 export interface ChildernProps {
@@ -11,8 +10,6 @@ export default function RootLayout({ children }: ChildernProps) {
   return (
     <html lang="ko">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
           rel="stylesheet"
           type="text/css"
