@@ -2,13 +2,14 @@ import { FOOTER_LOGO_DATA } from "@/util/staticValue";
 import Link from "next/link";
 import { Acme } from "next/font/google";
 import SharedLinkLogo from "./SharedLinkLogo";
+import OptionalFooter from "./OptionalFooter";
 const acme = Acme({
   weight: "400",
   subsets: ["latin"],
 });
 function Footer() {
   return (
-    <footer className={`flex flex-col items-center pt-32 767px:pt-[102.5px]`}>
+    <OptionalFooter>
       <div
         className={`flex h-40 px-24 pt-8 pb-16 flex-col items-center shrink-0 self-stretch bg-black 767px:px-8 767px:pt-8 767px:pb-16`}
       >
@@ -49,7 +50,7 @@ function Footer() {
           </span>
         </div>
       </div>
-    </footer>
+    </OptionalFooter>
   );
 }
 export default Footer;
