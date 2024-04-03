@@ -13,13 +13,9 @@ const Signup = () => {
     let shouldRedirect = false;
     if (window.localStorage.length) {
       let key;
-      let value;
       for (let i = 0; i < localStorage.length; i++) {
         key = localStorage.key(i);
-        if (key) {
-          value = localStorage.getItem(key);
-        }
-        if (key === value) {
+        if (key === "accessToken") {
           shouldRedirect = true;
           break;
         }
