@@ -45,12 +45,14 @@ export const SIGNUP_TEXT = {
 export const EMAIL_VALIDATION_TEXT = {
   empty: "이메일을 입력해 주세요.",
   falsy: "올바른 이메일 주소가 아닙니다.",
+  fail: "이메일을 확인해 주세요.",
 };
 
 export const PASSWORD_VALIDATION_TEXT = {
   empty: "비밀번호를 입력해 주세요.",
   falsy: "비밀번호는 영문,숫자 조합 8자 이상 입력해 주세요.",
   dismatch: "비밀번호가 일치하지 않아요.",
+  fail: "비밀번호를 확인해 주세요.",
 };
 
 export const USER_INITIAL_VALUE = {
