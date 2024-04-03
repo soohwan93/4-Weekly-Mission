@@ -93,6 +93,7 @@ const SigninForm = () => {
         </label>
         <input
           {...register("email", {
+            validate: (value) => validateSigninEmailInput(value),
             onBlur: () => handleEmailBlur(),
           })}
           placeholder={INPUT_SIGNIN_PLACEHOLDER_TEXT.email}

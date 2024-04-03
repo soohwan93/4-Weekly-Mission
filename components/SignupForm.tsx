@@ -129,6 +129,7 @@ const SignupForm = () => {
               value: /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/,
               message: PASSWORD_VALIDATION_TEXT.falsy,
             },
+            validate: (value) => validateSignupPasswordInput(value),
             onBlur: () => handlePasswordBlur(),
           })}
           placeholder={INPUT_SIGNUP_PLACEHOLDER_TEXT.password}
@@ -156,6 +157,7 @@ const SignupForm = () => {
         />
         <input
           {...register("passwordCheck", {
+            required: PASSWORD_VALIDATION_TEXT.empty,
             validate: (value) =>
               value === getValues("password") ||
               PASSWORD_VALIDATION_TEXT.dismatch,
