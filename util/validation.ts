@@ -19,7 +19,6 @@ export const validateSigninEmailInput = (email: string) => {
   } else if (!isEmailVaild(email)) {
     return EMAIL_VALIDATION_TEXT.falsy;
   }
-  return "";
 };
 
 //이메일 유효성 검사(회원가입)
@@ -32,7 +31,6 @@ export const validateSignupEmailInput = async (email: string) => {
       return String(emailErrMsg);
     }
   }
-  return "";
 };
 
 export async function emailValidationMsgFromAPI(email: string) {
@@ -65,7 +63,9 @@ export const validateSigninPasswordInput = (password: string) =>
 
 //비밀번호 유효성 검사(회원가입)
 export const validateSignupPasswordInput = (password: string) => {
-  if (!isPasswordValid(password)) {
+  if (!password) {
+    return PASSWORD_VALIDATION_TEXT.empty;
+  } else if (!isPasswordValid(password)) {
     return PASSWORD_VALIDATION_TEXT.falsy;
   }
   return "";
