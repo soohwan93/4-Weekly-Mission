@@ -81,10 +81,7 @@ const SignupForm = () => {
   const onSubmit = async (data: FieldValues) => {
     const result = await postSignupData(data);
     if (result.data) {
-      tokenSetting.saveToLocalStorage(
-        result.data.accessToken,
-        result.data.accessToken
-      );
+      tokenSetting.saveToLocalStorage("accessToken", result.data.accessToken);
       router.push("/folder");
     }
   };
