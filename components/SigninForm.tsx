@@ -75,7 +75,7 @@ const SigninForm = () => {
     const result = await postLoginData(data);
     if (result.data) {
       tokenSetting.saveToLocalStorage(data.email, result.data.accessToken);
-      router.push("/");
+      router.push("/folder");
     } else {
       handleEmailBlur(EMAIL_VALIDATION_TEXT.fail);
       handlePasswordBlur(PASSWORD_VALIDATION_TEXT.fail);
