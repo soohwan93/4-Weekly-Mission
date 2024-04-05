@@ -28,7 +28,11 @@
     ".next/types/**/*.ts",
     "tailwind.config.ts",
     "postcss.config.js",
+<<<<<<< HEAD
     "app/components/KaKaoShare.jsx"
+=======
+    "components/KaKaoShare.jsx"
+>>>>>>> parent of 99bdc5a (충돌된 파일 이전 파일로 변경)
   ],
   "exclude": ["node_modules"]
 }
