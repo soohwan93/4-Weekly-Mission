@@ -19,7 +19,7 @@ export default function Home() {
           <span>쉽게 저장하고 관리해 보세요</span>
         </div>
         <Link
-          className="text-lg font-semibold  rounded-lg bg-gradient-to-r from-[0.12%] from-[#6d6afe] to-[101.84%] to-[#6ae3fe] text-white flex w-[350px] py-4 px-5 justify-center items-center gap-10px 767px:w-[200px] 767px:px-4 767px:py-10px"
+          className="text-lg font-semibold  rounded-lg bg-gradient-to-r from-[0.12%] from-[#6d6afe] to-[101.84%] to-[#6ae3fe] text-white flex w-[350px] py-4 px-5 justify-center items-center gap-[10px] 767px:w-[200px] 767px:px-4"
           href="/signup"
         >
           링크 추가하기
@@ -35,7 +35,7 @@ export default function Home() {
       </section>
       <section className="flex pt-[120px] px-0 pb-[50px] justify-center items-center z-[1] text-white 1199px:pt-20 767px:py-10 767px:px-[35px] 767px:relative">
         <div className="flex items-center gap-[157px] 1199px:gap-[51px] 767px:w-calc-com 767px:flex-col 767px:items-start 767px:gap-6">
-          <div className="flex w-min flex-col items-start gap-10px text-5xl font-bold tracking-[-0.3px] text-black break-keep 767px:text-2xl 767px:w-auto">
+          <div className="flex w-min flex-col items-start gap-[10px] text-5xl font-bold tracking-[-0.3px] text-black break-keep 767px:text-2xl 767px:w-auto">
             <div>
               <span className="bg-gradient-to-r from-[1.72%] from-[#fe8a8a] to-[74.97%] to-[#a4ceff] text-transparent bg-clip-text 767px:text-2xl">
                 원하는&nbsp;링크
@@ -59,9 +59,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="flex py-[50px] justify-center items-center z-1 text-white 767px:pt-[62.5px] 767px:pr-[35px] 767px:pb-10 767px:pl-[25px] 767px:relative">
+      <section className="flex py-[50px] justify-center items-center z-1 text-white 767px:pt-[62.5px] 767px:pr-[35px] 767px:pl-[25px] 767px:relative">
         <div className="flex items-center gap-[157px] 1199px:gap-[51px] 767px:w-calc-com 767px:flex-col 767px:items-start 767px:gap-6 flex-row-reverse">
-          <div className="flex w-min flex-col items-start gap-10px text-5xl font-bold tracking-[-0.3px] text-black break-keep 767px:text-2xl 767px:w-auto">
+          <div className="flex w-min flex-col items-start gap-[10px] text-5xl font-bold tracking-[-0.3px] text-black break-keep 767px:text-2xl 767px:w-auto">
             <div>
               <div className="flex 767px:inline-block">
                 링크를&nbsp;폴더로&nbsp;
@@ -87,9 +87,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="flex py-[50px] justify-center items-center z-1 text-white 767px:pt-[62.5px] 767px:pr-[35px] 767px:pb-10 767px:pl-[25px] 767px:relative">
+      <section className="flex py-[50px] justify-center items-center z-1 text-white 767px:pt-[62.5px] 767px:pr-[35px] 767px:pl-[25px] 767px:relative">
         <div className="flex items-center gap-[157px] 1199px:gap-[51px] 767px:w-calc-com 767px:flex-col 767px:items-start 767px:gap-6">
-          <div className="flex w-min flex-col items-start gap-10px text-5xl font-bold tracking-[-0.3px] text-black break-keep 767px:text-2xl 767px:w-auto">
+          <div className="flex w-min flex-col items-start gap-[10px] text-5xl font-bold tracking-[-0.3px] text-black break-keep 767px:text-2xl 767px:w-auto">
             <div>
               <div className="flex 767px:inline-block">
                 저장한&nbsp;링크를&nbsp;
@@ -116,9 +116,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="flex py-[50px] justify-center items-center z-1 text-white 767px:pt-[62.5px] 767px:pr-[35px] 767px:pb-4 767px:pl-[25px] 767px:relative">
+      <section className="flex py-[50px] justify-center items-center z-1 text-white 767px:pt-[62.5px] 767px:pr-[35px] 767px:pl-[25px] 767px:relative">
         <div className="flex items-center gap-[157px] 1199px:gap-[51px] 767px:w-calc-com 767px:flex-col 767px:items-start 767px:gap-6 flex-row-reverse">
-          <div className="flex w-min flex-col items-start gap-10px text-5xl font-bold tracking-[-0.3px] text-black break-keep 767px:text-2xl 767px:w-auto">
+          <div className="flex w-min flex-col items-start gap-[10px] text-5xl font-bold tracking-[-0.3px] text-black break-keep 767px:text-2xl 767px:w-auto">
             <div>
               <div className="flex 767px:inline-block">
                 저장한&nbsp;링크를&nbsp;

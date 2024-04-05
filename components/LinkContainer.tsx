@@ -1,5 +1,5 @@
 import noImage from "@/public/no-image.png";
-import { LinksApiData } from "../shared/page";
+import { LinksApiData } from "../app/shared/page";
 import { formatDate, formatDateRelative } from "@/util/formatDate";
 export interface LinkContainerProps {
   item: LinksApiData;

@@ -1,6 +1,17 @@
-const ERROR_MSG = "데이터 불러오기 실패";
+import { FieldValues } from "react-hook-form";
 
+interface EmailObject {
+  email: string;
+}
+interface LoginObject {
+  email: string;
+  password: string;
+}
+
+const ERROR_MSG = "데이터 불러오기 실패";
+const checkLoginPossibleURL = "https://bootcamp-api.codeit.kr/api/sign-in";
 const checkEmailApiURL = "https://bootcamp-api.codeit.kr/api/check-email";
+const checkSignupPossibleURL = "https://bootcamp-api.codeit.kr/api/sign-up";
 
 const sharedUserSampleApiURL = "https://bootcamp-api.codeit.kr/api/users/1";
 const sharedFolderSampleApiURL =
@@ -11,10 +22,26 @@ const folderListAllDataApiURL =
 const folderListDataApiURL =
   "https://bootcamp-api.codeit.kr/api/users/1/links?folderId=";
 
-async function getApiResponse(url: string, errorMessage: string) {
-  const response = await fetch(url, { cache: "force-cache" });
+async function getApiResponse(url: string) {
+  const response = await fetch(url);
   if (!response?.ok) {
-    return new Error(errorMessage);
+    return new Error(ERROR_MSG);
+  }
+  const body = await response.json();
+
+  return body;
+}
+
+async function postApiResponse(url: string, bodyData: Object) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(bodyData),
+  });
+  if (!response?.ok) {
+    return new Error(ERROR_MSG);
   }
   const body = await response.json();
 
@@ -22,18 +49,33 @@ async function getApiResponse(url: string, errorMessage: string) {
 }
 
 export function getSharedUserSample() {
-  return getApiResponse(sharedUserSampleApiURL, ERROR_MSG);
+  return getApiResponse(sharedUserSampleApiURL);
 }
 
 export function getSharedFolderSample() {
-  return getApiResponse(sharedFolderSampleApiURL, ERROR_MSG);
+  return getApiResponse(sharedFolderSampleApiURL);
 }
 
 export function getFolderList() {
-  return getApiResponse(folderListApiURL, ERROR_MSG);
+  return getApiResponse(folderListApiURL);
 }
 
 export function getFolderListData(id: number) {
   const requestUrl = id ? folderListDataApiURL + id : folderListAllDataApiURL;
-  return getApiResponse(requestUrl, ERROR_MSG);
+  return getApiResponse(requestUrl);
+}
+
+export function postLoginData(loginData: FieldValues) {
+  const requestUrl = checkLoginPossibleURL;
+  return postApiResponse(requestUrl, loginData);
+}
+
+export function postSignupEmailValidationData(email: EmailObject) {
+  const requestUrl = checkEmailApiURL;
+  return postApiResponse(requestUrl, email);
+}
+
+export function postSignupData(loginData: FieldValues) {
+  const requestUrl = checkSignupPossibleURL;
+  return postApiResponse(requestUrl, loginData);
 }

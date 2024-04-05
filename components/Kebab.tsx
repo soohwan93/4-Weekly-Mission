@@ -1,4 +1,4 @@
-import { OnModalProps } from "./Modal";
+import { OnModalProps } from "../app/folder/page";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 
 import { MODAL_TYPE } from "@/util/staticValue";

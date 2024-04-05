@@ -1,7 +1,7 @@
-import { OnModalProps } from "./Modal";
 import AddImage from "./AddImage";
 import Link from "next/link";
 import { MODAL_TYPE } from "@/util/staticValue";
+import { OnModalProps } from "../app/folder/page";
 export interface FolderListProps {
   created_at: string;
   favorite: boolean;

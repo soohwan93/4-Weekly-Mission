@@ -1,30 +1,21 @@
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+"use client";
 
+import { ReactNode, createContext, useContext } from "react";
 import { getSharedUserSample } from "@/util/api";
 import { USER_INITIAL_VALUE } from "@/util/staticValue";
 
 const Context = createContext(USER_INITIAL_VALUE);
 
-export const ContextProvider = ({ children }: { children: ReactNode }) => {
-  const [userProfile, setUserProfile] = useState(USER_INITIAL_VALUE);
+export const ContextProvider = async ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  const result = await getSharedUserSample();
+  if (!result) return;
 
-  const handleSharedUserProfile = async () => {
-    const result = await getSharedUserSample();
-    if (!result) return;
+  const userProfile = result.data[0];
 
-    const { id, email, image_source } = result.data[0];
-    setUserProfile({ id, email, image_source });
-  };
-
-  useEffect(() => {
-    handleSharedUserProfile();
-  }, []);
   return <Context.Provider value={userProfile}>{children}</Context.Provider>;
 };
 

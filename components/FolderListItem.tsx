@@ -1,4 +1,4 @@
-import { OnModalProps } from "./Modal";
+import { OnModalProps } from "../app/folder/page";
 import FolderLinkConatiner from "./FolderLinkConatiner";
 
 export interface FolderListItemProps extends OnModalProps {

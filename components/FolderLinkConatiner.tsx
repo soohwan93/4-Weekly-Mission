@@ -1,5 +1,5 @@
 import noImage from "@/public/no-image.png";
-import { OnModalProps } from "./Modal";
+import { OnModalProps } from "../app/folder/page";
 import starOffImg from "@/public/star-off.png";
 import starOnImg from "@/public/star-on.png";
 

@@ -1,9 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
 
 export const INPUT_LABEL_TEXT = {
-  inputEmailText: "이메일",
-  inputPasswordText: "비밀번호",
-  inputCheckPasswordText: "비밀번호 확인",
+  email: "이메일",
+  password: "비밀번호",
+  passwordCheck: "비밀번호 확인",
+};
+
+export const INPUT_SIGNIN_PLACEHOLDER_TEXT = {
+  email: "이메일을 입력해 주세요.",
+  password: "비밀번호를 입력해 주세요.",
+};
+export const INPUT_SIGNUP_PLACEHOLDER_TEXT = {
+  email: "이메일을 입력해 주세요.",
+  password: "영문, 숫자를 조합해 8자 이상 입력해 주세요.",
+  passwordCheck: "비밀번호와 일치하는 값을 입력해 주세요.",
 };
 
 export const BUTTON_TEXT = {
@@ -35,12 +45,14 @@ export const SIGNUP_TEXT = {
 export const EMAIL_VALIDATION_TEXT = {
   empty: "이메일을 입력해 주세요.",
   falsy: "올바른 이메일 주소가 아닙니다.",
+  fail: "이메일을 확인해 주세요.",
 };
 
 export const PASSWORD_VALIDATION_TEXT = {
   empty: "비밀번호를 입력해 주세요.",
   falsy: "비밀번호는 영문,숫자 조합 8자 이상 입력해 주세요.",
   dismatch: "비밀번호가 일치하지 않아요.",
+  fail: "비밀번호를 확인해 주세요.",
 };
 
 export const USER_INITIAL_VALUE = {
