@@ -14,10 +14,10 @@ import {
   validateSignupPasswordChkInput,
   validateSignupPasswordInput,
 } from "@/util/validation";
-import { postSignupData } from "@/util/api";
-import tokenSetting from "@/util/tokenSetting";
+import { useUserData } from "@/util/ContextProvider";
 
 const SignupForm = () => {
+  const { signup } = useUserData();
   const router = useRouter();
   const {
     register,
@@ -79,9 +79,8 @@ const SignupForm = () => {
   };
 
   const onSubmit = async (data: FieldValues) => {
-    const result = await postSignupData(data);
-    if (result.data) {
-      tokenSetting.saveToLocalStorage("accessToken", result.data.accessToken);
+    const result = await signup(data);
+    if (result) {
       router.push("/folder");
     }
   };
