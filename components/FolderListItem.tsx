@@ -5,6 +5,7 @@ export interface FolderListItemProps extends OnModalProps {
   folderListItem: FolderListApiItem[];
   filterdFolderListItem: FolderListApiItem[];
   value: string;
+  isPending: boolean;
 }
 
 export interface FolderListApiItem extends SearchListProps {
@@ -26,13 +27,14 @@ function FolderListItem({
   onModal,
   filterdFolderListItem,
   value,
+  isPending,
 }: FolderListItemProps) {
   const itemstoRender = value ? filterdFolderListItem : folderListItem;
-  const hasItemsToRender = itemstoRender?.length;
+  const hasItemsToRender = itemstoRender && itemstoRender.length > 0;
 
   return (
     <>
-      {hasItemsToRender > 0 ? (
+      {hasItemsToRender ? (
         <>
           <div className="grid grid-cols-link-container gap-5 justify-center w-full">
             {itemstoRender.map((item) => (
@@ -45,7 +47,11 @@ function FolderListItem({
           </div>
         </>
       ) : (
-        <div style={{ paddingBottom: `200px` }}>저장된 링크가 없습니다</div>
+        <>
+          {!isPending && (
+            <div style={{ paddingBottom: `200px` }}>저장된 링크가 없습니다</div>
+          )}
+        </>
       )}
     </>
   );
