@@ -1,15 +1,28 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchLinkInput from "./SearchLinkInput";
 import LinkContainer from "./LinkContainer";
 import useSearchInput from "@/util/hooks/useSearchInput";
-import { LinksApiData } from "@/app/shared/page";
+import { useUserData } from "@/util/ContextProvider";
+import { getSharedLinks } from "@/util/api";
+import { usePathname } from "next/navigation";
 
-interface SharedMainProps {
-  links: LinksApiData[];
+export interface SharedLinksApi {
+  id: number;
+  created_at: string;
+  updated_at: string | boolean;
+  url: string;
+  title: string;
+  description: string;
+  image_source: string;
+  folder_id: number;
 }
 
-const SharedMain = ({ links }: SharedMainProps) => {
+const SharedMain = () => {
+  const pathname = usePathname();
+  const folderId = pathname.split("/shared/")[1];
+  const { user } = useUserData(true);
+  const [links, setLinks] = useState<SharedLinksApi[]>([]);
   const {
     filterdItem,
     handleCloseClick,
@@ -18,9 +31,20 @@ const SharedMain = ({ links }: SharedMainProps) => {
     inputValue,
     isFocus,
     closeButtonRef,
-  } = useSearchInput<LinksApiData>(links);
+  } = useSearchInput<SharedLinksApi>(links);
   const itemstoRender = inputValue ? filterdItem : links;
   const hasItemsToRender = itemstoRender?.length;
+
+  const fetchLinkData = async () => {
+    const result = await getSharedLinks(user?.id as number, Number(folderId));
+    setLinks(result.data);
+  };
+  useEffect(() => {
+    if (user && user.id) {
+      fetchLinkData();
+    }
+  }, [user]);
+
   return (
     <>
       <SearchLinkInput
@@ -33,7 +57,7 @@ const SharedMain = ({ links }: SharedMainProps) => {
       />
       {hasItemsToRender > 0 ? (
         <div className="grid grid-cols-link-container gap-5 justify-center w-full">
-          {itemstoRender.map((item: LinksApiData) => (
+          {itemstoRender.map((item: SharedLinksApi) => (
             <LinkContainer item={item} key={item.id} />
           ))}
         </div>
