@@ -7,15 +7,14 @@ import CopyLinkButton from "./CopyLink";
 
 export interface ModalShareProps {
   userId: number;
-  folderId: number;
   folderName: string;
 }
 
-function ModalShare({ userId, folderId, folderName }: ModalShareProps) {
+function ModalShare({ folderName }: ModalShareProps) {
   const currentUrl = window.location.href;
-  const shareUrl =
-    currentUrl.replace("/folder", "") +
-    `/shared?user=${userId}&folder=${folderId}`;
+  // const shareUrl =
+  //   currentUrl.replace("/folder", "") +
+  //   `/shared?user=${userId}&folder=${folderId}`;
 
   return (
     <>
@@ -28,19 +27,19 @@ function ModalShare({ userId, folderId, folderName }: ModalShareProps) {
           src={kakaoShareImg.src}
           alt="kakao-share"
           text="카카오톡"
-          shareUrl={shareUrl}
+          shareUrl={currentUrl}
         />
         <FacebookShare
           src={facebookShareImg.src}
           alt="facebook-share"
           text="페이스북"
-          shareUrl={shareUrl}
+          shareUrl={currentUrl}
         />
         <CopyLinkButton
           src={linkShareImg.src}
           alt="link-share"
           text="링크 복사"
-          shareUrl={shareUrl}
+          shareUrl={currentUrl}
         />
       </div>
     </>
