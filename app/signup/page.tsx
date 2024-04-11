@@ -10,8 +10,20 @@ const Signup = () => {
   const [isRender, setIsRender] = useState(false);
   const router = useRouter();
   useEffect(() => {
+    let shouldRedirect = false;
     if (window.localStorage.length) {
-      setIsRender(false);
+      let key;
+      for (let i = 0; i < localStorage.length; i++) {
+        key = localStorage.key(i);
+        if (key === "accessToken") {
+          shouldRedirect = true;
+          break;
+        }
+      }
+    } else {
+      shouldRedirect = false;
+    }
+    if (shouldRedirect) {
       router.push("/folder");
     } else {
       setIsRender(true);
