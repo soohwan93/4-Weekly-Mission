@@ -1,57 +1,33 @@
-import React from "react";
-import { notFound } from "next/navigation";
-import { getSharedFolderSample } from "@/util/api";
-import OwnerProfile from "@/components/OwnerProfile";
-import SharedMain from "@/components/SharedMain";
+"use client";
 
-export interface FolderApiData {
-  count: number;
-  id: number;
-  links: LinksApiData[];
-  name: string;
-  owner: OwnerApiData;
-}
+import { useUserData } from "@/util/ContextProvider";
+import Link from "next/link";
 
-export interface LinksApiData {
-  createdAt: string;
-  description: string;
-  id: number;
-  imageSource: string;
-  title: string;
-  url: string;
-}
-
-export interface OwnerApiData {
-  id: number;
-  name: string;
-  profileImageSource: string;
-}
-
-interface OwnerProfileData {
-  links: LinksApiData[];
-  name: string;
-  owner: OwnerApiData;
-}
-
-const Shared = async () => {
-  const sharedFolderSampleResult = await getSharedFolderSample();
-  if (!sharedFolderSampleResult) return notFound();
-
-  const ownerProfile = sharedFolderSampleResult.folder;
-
-  const { links, name, owner }: OwnerProfileData = ownerProfile;
-
-  if (!ownerProfile) return;
+const FolderList = () => {
+  const { folders } = useUserData(true);
   return (
     <>
-      <div className="flex flex-col items-center">
-        <OwnerProfile name={name} owner={owner} />
-        <section className="flex flex-col items-center gap-10 py-10 max-w-[1060px] min-h-[1200px] w-full 1124px:py-10 1124px:px-8">
-          <SharedMain links={links} />
-        </section>
+      <div className="flex flex-col items-center h-[80vh]">
+        {folders ? (
+          <h1 className="text-5xl mt-20">폴더를 선택하세요</h1>
+        ) : (
+          <h1>폴더가 없어요</h1>
+        )}
+        <ul>
+          {folders?.map((item) => (
+            <Link className="text-3xl" href={`/shared/${item.id}`}>
+              <li
+                className="rounded-md py-8 px-5 hover:bg-light-blue"
+                key={item.id}
+              >
+                {item.name}
+              </li>
+            </Link>
+          ))}
+        </ul>
       </div>
     </>
   );
 };
 
-export default Shared;
+export default FolderList;
