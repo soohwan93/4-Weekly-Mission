@@ -51,8 +51,8 @@ export const Context = createContext<Context>({
   isPending: true,
   folders: [],
   isFolderPending: true,
-  login: async (data) => false,
-  signup: async (data) => false,
+  login: async () => false,
+  signup: async () => false,
 });
 
 export const ContextProvider = ({ children }: { children: ReactNode }) => {

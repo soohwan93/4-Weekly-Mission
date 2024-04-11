@@ -13,9 +13,7 @@ import useSearchInput, {
 import { getFolderListData } from "@/util/api";
 import ModalPortal from "@/util/ModalPortal";
 import Modal from "@/components/Modal";
-import FolderButtonAll, {
-  handleButtonListItemClick,
-} from "@/components/FolderButtonAll";
+import { handleButtonListItemClick } from "@/components/FolderButtonAll";
 import AddLinkInput from "@/components/AddLinkInput";
 import SearchLinkInput from "@/components/SearchLinkInput";
 import FolderTitle from "@/components/FolderTitle";
@@ -27,7 +25,6 @@ import ModalDeleteLink from "@/components/ModalDeleteLink";
 import ModalAddFolder from "@/components/ModalAddFolder";
 import { useUserData } from "@/util/ContextProvider";
 import FolderButton from "@/components/FolderButton";
-import { useRouter } from "next/navigation";
 
 export interface FolderListApiItem extends SearchListApiProps {
   id: number;
@@ -55,9 +52,7 @@ export interface OnModalProps {
 }
 
 const Folder = ({ params }: { params: { folderId: string } }) => {
-  const { user, folders, isFolderPending } = useUserData(true);
-  const router = useRouter();
-
+  const { user, folders } = useUserData(true);
   const folderTitleName = folders?.filter(
     (folder) => folder.id === Number(params.folderId)
   )[0]?.name;
@@ -99,7 +94,7 @@ const Folder = ({ params }: { params: { folderId: string } }) => {
 
   useEffect(() => {
     handleButtonListItemClick(Number(params.folderId));
-  }, [handleButtonListItemClick]);
+  }, [handleButtonListItemClick, params.folderId]);
 
   return (
     <>
