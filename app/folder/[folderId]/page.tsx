@@ -18,13 +18,15 @@ import FolderButtonAll, {
 } from "@/components/FolderButtonAll";
 import AddLinkInput from "@/components/AddLinkInput";
 import SearchLinkInput from "@/components/SearchLinkInput";
-
+import FolderTitle from "@/components/FolderTitle";
 import FolderListItem from "@/components/FolderListItem";
-
+import ModalShare from "@/components/ModalShare";
+import ModalEdit from "@/components/ModalEdit";
+import ModalDeleteFolder from "@/components/ModalDeleteFolder";
 import ModalDeleteLink from "@/components/ModalDeleteLink";
 import ModalAddFolder from "@/components/ModalAddFolder";
 import { useUserData } from "@/util/ContextProvider";
-import FolderTitleAll from "@/components/FolderTitleAll";
+import FolderButton from "@/components/FolderButton";
 import { useRouter } from "next/navigation";
 
 export interface FolderListApiItem extends SearchListApiProps {
@@ -52,9 +54,14 @@ export interface OnModalProps {
   onModal: (type?: string, link?: string) => void;
 }
 
-const FolderAll = () => {
-  const { folders, isFolderPending } = useUserData(true);
+const Folder = ({ params }: { params: { folderId: string } }) => {
+  const { user, folders, isFolderPending } = useUserData(true);
   const router = useRouter();
+
+  const folderTitleName = folders?.filter(
+    (folder) => folder.id === Number(params.folderId)
+  )[0]?.name;
+
   const footerTarget = useRef<HTMLDivElement>(null);
   const [folderListItem, setFolderListItem] = useState<FolderListApiItem[]>([]);
   const {
@@ -73,12 +80,7 @@ const FolderAll = () => {
   const handleButtonListItemClick: handleButtonListItemClick = useCallback(
     async (id) => {
       setIsFolderListPending(true);
-      let result;
-      if (id) {
-        result = await getFolderListData(id);
-      } else {
-        result = await getFolderListData();
-      }
+      const result = await getFolderListData(id);
 
       if (!result) return;
 
@@ -96,7 +98,7 @@ const FolderAll = () => {
   };
 
   useEffect(() => {
-    handleButtonListItemClick();
+    handleButtonListItemClick(Number(params.folderId));
   }, [handleButtonListItemClick]);
 
   return (
@@ -113,14 +115,21 @@ const FolderAll = () => {
             isFocus={isFocus}
           />
 
-          {!isFolderPending && folders.length === 0 ? (
+          {folders.length === 0 ? (
             <div>저장된 폴더가 없습니다</div>
           ) : (
             <>
               {folders.length > 0 && (
                 <>
-                  <FolderButtonAll folderList={folders} onModal={handleModal} />
-                  <FolderTitleAll />
+                  <FolderButton
+                    folderList={folders}
+                    clickedButtonId={Number(params.folderId)}
+                    onModal={handleModal}
+                  />
+                  <FolderTitle
+                    folderId={Number(params.folderId)}
+                    onModal={handleModal}
+                  />
                   <FolderListItem
                     filterdFolderListItem={filterdItem}
                     folderListItem={folderListItem}
@@ -137,6 +146,18 @@ const FolderAll = () => {
       {isModal && (
         <ModalPortal>
           <Modal onModal={handleModal}>
+            {modalType === "share" && (
+              <ModalShare
+                folderName={folderTitleName}
+                userId={user?.id as number}
+              />
+            )}
+            {modalType === "editFolder" && (
+              <ModalEdit folderName={folderTitleName} />
+            )}
+            {modalType === "deleteFolder" && (
+              <ModalDeleteFolder folderName={folderTitleName} />
+            )}
             {modalType === "deleteLink" && (
               <ModalDeleteLink linkUrl={linkUrl} />
             )}
@@ -149,4 +170,4 @@ const FolderAll = () => {
   );
 };
 
-export default FolderAll;
+export default Folder;
