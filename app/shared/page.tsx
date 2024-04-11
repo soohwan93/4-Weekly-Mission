@@ -15,11 +15,12 @@ const FolderList = () => {
         )}
         <ul>
           {folders?.map((item) => (
-            <Link className="text-3xl" href={`/shared/${item.id}`}>
-              <li
-                className="rounded-md py-8 px-5 hover:bg-light-blue"
-                key={item.id}
-              >
+            <Link
+              key={item.id}
+              className="text-3xl"
+              href={`/shared/${item.id}`}
+            >
+              <li className="rounded-md py-8 px-5 hover:bg-light-blue">
                 {item.name}
               </li>
             </Link>
