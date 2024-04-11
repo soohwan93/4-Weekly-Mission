@@ -1,8 +1,9 @@
 import noImage from "@/public/no-image.png";
-import { LinksApiData } from "../app/shared/page";
+
+import { SharedLinksApi } from "./SharedMain";
 import { formatDate, formatDateRelative } from "@/util/formatDate";
 export interface LinkContainerProps {
-  item: LinksApiData;
+  item: SharedLinksApi;
 }
 function LinkContainer({ item }: LinkContainerProps) {
   return (
@@ -15,19 +16,19 @@ function LinkContainer({ item }: LinkContainerProps) {
       <div className="overflow-hidden w-[340px] h-[170px] relative">
         <img
           className="w-full h-[170px] object-cover [transition-property:transform] [transition-duration:0.5s] [transition-timing-function:ease] hover:scale-[1.3]"
-          src={item.imageSource || noImage.src}
-          alt={String(item.id) || "no-Image"}
+          src={item.image_source || noImage.src}
+          alt={String(item.title) || "no-Image"}
         />
       </div>
       <div className="flex flex-col gap-[15px]">
         <div className="flex flex-col gap-[15px] pb-5 px-5">
           <div className="flex justify-between text-[13px]">
-            {formatDateRelative(item.createdAt)}
+            {formatDateRelative(item.created_at)}
           </div>
           <div className="line-clamp-2 whitespace-normal overflow-ellipsis h-11">
             {item.title}
           </div>
-          <div className="text-sm">{formatDate(item.createdAt)}</div>
+          <div className="text-sm">{formatDate(item.created_at)}</div>
         </div>
       </div>
     </a>
