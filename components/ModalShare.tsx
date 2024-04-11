@@ -12,9 +12,6 @@ export interface ModalShareProps {
 
 function ModalShare({ folderName }: ModalShareProps) {
   const currentUrl = window.location.href;
-  // const shareUrl =
-  //   currentUrl.replace("/folder", "") +
-  //   `/shared?user=${userId}&folder=${folderId}`;
 
   return (
     <>
