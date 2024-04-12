@@ -26,7 +26,6 @@ const SearchLinkInput = ({
       />
       <input
         className="flex w-full flex-col items-start gap-2 relative rounded-lg bg-search-link-input border-none py-5 px-[45px] focus:outline-none placeholder:text-[#9fa6b2]"
-        // className="flex w-full flex-col items-start gap-2 relative rounded-lg bg-search-link-input border-none bg-[url('../public/search.svg')] bg-no-repeat py-5 px-[45px] bg-left [background-position-x:20px] focus:outline-none focus:bg-[url('../public/search-purple.svg')] placeholder:text-[#9fa6b2]"
         id="searchLinkInput"
         type="text"
         placeholder="링크를 검색해 보세요"

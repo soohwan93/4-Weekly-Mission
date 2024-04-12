@@ -96,7 +96,13 @@ const AddLinkInput = ({
           </button>
         </div>
       </div>
-
+      {isAdd && (
+        <ModalPortal>
+          <Modal onModal={handleAddModal}>
+            <ModalAdd />
+          </Modal>
+        </ModalPortal>
+      )}
       {isAddLinkInputHideFooter && isAddLinkInputHide && (
         <div
           className={`flex flex-col items-center bg-[#f0f6ff] py-[24px] w-full ${
