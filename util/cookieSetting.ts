@@ -1,3 +1,5 @@
+import { setCookie } from "nookies";
+
 export function getCookie(name: string): string | undefined {
   if (typeof window === "undefined") {
     return undefined;
@@ -20,4 +22,18 @@ export function checkCookie(name: string) {
     }
   }
   return false;
+}
+
+export function setAccessCookieToken(data: string) {
+  setCookie(null, "accessToken", data, {
+    maxAge: 60 * 60,
+    path: "/",
+  });
+}
+
+export function setRefreshCookieToken(data: string) {
+  setCookie(null, "refreshToken", data, {
+    maxAge: 7 * 24 * 60 * 60,
+    path: "/",
+  });
 }
