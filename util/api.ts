@@ -1,11 +1,16 @@
 "use client";
 import { FieldValues } from "react-hook-form";
-import { getCookie } from "./cookieSetting";
+import {
+  getCookie,
+  setAccessCookieToken,
+  setRefreshCookieToken,
+} from "./cookieSetting";
 interface EmailObject {
   email: string;
 }
 
 const ERROR_MSG = "데이터 불러오기 실패";
+const REFRESH_ERROR_MSG = "다시 로그인 하세요";
 const checkLoginPossibleURL = "https://bootcamp-api.codeit.kr/api/sign-in";
 const checkEmailApiURL = "https://bootcamp-api.codeit.kr/api/check-email";
 const checkSignupPossibleURL = "https://bootcamp-api.codeit.kr/api/sign-up";
@@ -16,7 +21,7 @@ const sharedFolderSampleApiURL =
 const sharedFolderApiURL = "https://bootcamp-api.codeit.kr/api/folders";
 const folderAllDataApiURL = "https://bootcamp-api.codeit.kr/api/links";
 const folderDataApiURL = "https://bootcamp-api.codeit.kr/api/links?folderId=";
-
+const refreshTokenApiURL = "https://bootcamp-api.codeit.kr/api/refresh-token";
 async function fetchWithToken(url: string, options: RequestInit = {}) {
   const headers = new Headers(options.headers as HeadersInit);
   const accessToken = getCookie("accessToken");
@@ -34,7 +39,37 @@ async function fetchWithToken(url: string, options: RequestInit = {}) {
     headers,
   };
 
-  const response = await fetch(url, mergedOptions);
+  let response = await fetch(url, mergedOptions);
+
+  if (response.status === 401) {
+    const refreshTokenResponse = await fetch(refreshTokenApiURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        refresh_token: getCookie("refreshToken"),
+      }),
+    });
+    if (refreshTokenResponse.ok) {
+      const refreshTokenData = await refreshTokenResponse.json();
+      const accessToken = refreshTokenData.data.accessToken;
+      const refreshToken = refreshTokenData.data.refreshToken;
+
+      setAccessCookieToken(accessToken);
+      setRefreshCookieToken(refreshToken);
+      headers.set("Authorization", `Bearer ${accessToken}`);
+
+      const updatedOptions: RequestInit = {
+        ...mergedOptions,
+        headers: headers,
+      };
+
+      response = await fetch(url, updatedOptions);
+    } else {
+      throw new Error(REFRESH_ERROR_MSG);
+    }
+  }
 
   if (!response.ok) {
     return new Error(ERROR_MSG);
