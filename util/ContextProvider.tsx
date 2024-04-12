@@ -17,6 +17,7 @@ import { useContext } from "react";
 import { redirect, useRouter } from "next/navigation";
 import type { FieldValues } from "react-hook-form";
 import { setCookie } from "nookies";
+import { setAccessCookieToken, setRefreshCookieToken } from "./cookieSetting";
 interface UserProfile {
   user: user | null | undefined;
   isPending: boolean;
@@ -85,14 +86,8 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
   const login = async (data: FieldValues) => {
     const result = await postLoginData(data);
     if (result.data) {
-      setCookie(null, "accessToken", result.data.accessToken, {
-        maxAge: 60 * 60,
-        path: "/",
-      });
-      setCookie(null, "refreshToken", result.data.refreshToken, {
-        maxAge: 7 * 24 * 60 * 60,
-        path: "/",
-      });
+      setAccessCookieToken(result.data.accessToken);
+      setRefreshCookieToken(result.data.refreshToken);
       await fetchUserProfile();
       await fetchSharedFolder();
     }
@@ -102,14 +97,8 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
   const signup = async (data: FieldValues) => {
     const result = await postSignupData(data);
     if (result.data) {
-      setCookie(null, "accessToken", result.data.accessToken, {
-        maxAge: 60 * 60,
-        path: "/",
-      });
-      setCookie(null, "refreshToken", result.data.refreshToken, {
-        maxAge: 7 * 24 * 60 * 60,
-        path: "/",
-      });
+      setAccessCookieToken(result.data.accessToken);
+      setRefreshCookieToken(result.data.refreshToken);
       await fetchUserProfile();
       await fetchSharedFolder();
     }
