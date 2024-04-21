@@ -2,25 +2,21 @@ import AddImage from "./AddImage";
 import Link from "next/link";
 import { MODAL_TYPE } from "@/util/staticValue";
 import { OnModalProps } from "../app/folder/page";
-
 import { Folders } from "@/util/ContextProvider";
 import { useRouter } from "next/navigation";
 
+export type handleButtonListItemClick = (id?: number) => void;
+
 export interface FolderButtonProps extends OnModalProps {
   folderList: Folders[];
-  clickedButtonId: number;
 }
-function FolderButton({
-  folderList,
-  clickedButtonId,
-  onModal,
-}: FolderButtonProps) {
+function FolderButtonAll({ folderList, onModal }: FolderButtonProps) {
   const router = useRouter();
   return (
     <div className="flex items-center w-full">
       <div className="w-full flex items-center gap-2 flex-wrap">
         <button
-          className={`flex py-[6px] px-3 flex-col items-center transition-all ease-in-out bg-[#fff] text-[#000] [transition-duration:0.3s] [transition-delay:0s] rounded-[5px] border-[1px] border-solid border-[#6d6afe] h-[35px] whitespace-nowrap 767px:h-[30px] 767px:text-[14px] 767px:py-[4px] 767px:px-[10px] `}
+          className={`flex py-[6px] px-3 flex-col items-center transition-all ease-in-out bg-[#6d6afe] text-[#fff] [transition-duration:0.3s] [transition-delay:0s] rounded-[5px] border-[1px] border-solid border-[#6d6afe] h-[35px] whitespace-nowrap 767px:h-[30px] 767px:text-[14px] 767px:py-[4px] 767px:px-[10px] `}
           key="0"
           onClick={() => router.push(`/folder`)}
         >
@@ -28,11 +24,7 @@ function FolderButton({
         </button>
         {folderList?.map((item: Folders) => (
           <button
-            className={`flex py-[6px] px-3 flex-col items-center transition-all ease-in-out [transition-duration:0.3s] [transition-delay:0s] rounded-[5px] border-[1px] border-solid border-[#6d6afe] h-[35px] whitespace-nowrap 767px:h-[30px] 767px:text-[14px] 767px:py-[4px] 767px:px-[10px] ${
-              clickedButtonId === item.id
-                ? `bg-[#6d6afe] text-[#fff]`
-                : `bg-[#fff] text-[#000]`
-            }`}
+            className={`flex py-[6px] px-3 flex-col items-center transition-all ease-in-out bg-[#fff] text-[#000] [transition-duration:0.3s] [transition-delay:0s] rounded-[5px] border-[1px] border-solid border-[#6d6afe] h-[35px] whitespace-nowrap 767px:h-[30px] 767px:text-[14px] 767px:py-[4px] 767px:px-[10px]`}
             onClick={() => router.push(`/folder/${item.id}`)}
             key={item.id}
           >
@@ -52,4 +44,4 @@ function FolderButton({
   );
 }
 
-export default FolderButton;
+export default FolderButtonAll;

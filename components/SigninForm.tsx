@@ -12,11 +12,11 @@ import {
   validateSigninEmailInput,
   validateSigninPasswordInput,
 } from "@/util/validation";
-import { postLoginData } from "@/util/api";
-import tokenSetting from "@/util/tokenSetting";
 import { useRouter } from "next/navigation";
+import { useUserData } from "@/util/ContextProvider";
 
 const SigninForm = () => {
+  const { login } = useUserData();
   const router = useRouter();
   const {
     register,
@@ -72,9 +72,8 @@ const SigninForm = () => {
   };
 
   const onSubmit = async (data: FieldValues) => {
-    const result = await postLoginData(data);
-    if (result.data) {
-      tokenSetting.saveToLocalStorage("accessToken", result.data.accessToken);
+    const result = await login(data);
+    if (result) {
       router.push("/folder");
     } else {
       handleEmailBlur(EMAIL_VALIDATION_TEXT.fail);

@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { ContextProvider } from "@/util/ContextProvider";
 
 export interface ChildernProps {
   children: React.ReactNode;
@@ -43,9 +44,11 @@ export default function RootLayout({ children }: ChildernProps) {
         <title>Linkbrary</title>
       </head>
       <body className="font-Pretendard">
-        <Header />
-        {children}
-        <Footer />
+        <ContextProvider>
+          <Header />
+          {children}
+          <Footer />
+        </ContextProvider>
         <div id="modal-root" />
       </body>
     </html>

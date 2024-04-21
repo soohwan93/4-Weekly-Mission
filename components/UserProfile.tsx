@@ -1,22 +1,22 @@
 "use client";
-import Image from "next/image";
-import React from "react";
-import { useUserProfile } from "@/util/ContextProvider";
+
 import Link from "next/link";
+import { useUserData } from "@/util/ContextProvider";
 
 const UserProfile = () => {
-  const userData = useUserProfile();
+  const { user } = useUserData();
+
   return (
     <>
-      {userData?.image_source ? (
+      {user?.image_source ? (
         <div className="flex gap-1">
-          <Image
+          <img
             width={24}
             height={24}
-            src={userData.image_source}
+            src={user.image_source}
             alt="userProfileImg"
           />
-          <span className="767px:hidden">{userData.email}</span>
+          <span className="767px:hidden">{user.email}</span>
         </div>
       ) : (
         <Link
