@@ -1,22 +1,9 @@
 "use client";
 import { ReactNode, createContext } from "react";
 import { postLoginData, postSignupData } from "@/util/api";
-
 import { useContext } from "react";
 import type { FieldValues } from "react-hook-form";
 import { setAccessCookieToken, setRefreshCookieToken } from "../cookieSetting";
-interface UserProfile {
-  user: user | null | undefined;
-  isPending: boolean;
-}
-
-type user = {
-  id: number;
-  email: string;
-  image_source: string;
-  name: string;
-  isPending: boolean;
-};
 
 export interface Folders {
   id: number;
