@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { API } from "@/util/staticValue";
+import { API } from "./util/staticValue";
 
 export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken");
