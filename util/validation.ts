@@ -15,60 +15,54 @@ const isPasswordValid = (password: string) => {
 //이메일 유효성 검사(로그인)
 export const validateSigninEmailInput = (email: string) => {
   if (!email) {
-    return EMAIL_VALIDATION_TEXT.empty;
+    return EMAIL_VALIDATION_TEXT.EMPTY;
   } else if (!isEmailVaild(email)) {
-    return EMAIL_VALIDATION_TEXT.falsy;
+    return EMAIL_VALIDATION_TEXT.FALSY;
   }
 };
 
 //이메일 유효성 검사(회원가입)
 export const validateSignupEmailInput = async (email: string) => {
   if (!email) {
-    return EMAIL_VALIDATION_TEXT.empty;
+    return EMAIL_VALIDATION_TEXT.EMPTY;
   } else {
-    const emailErrMsg = await emailValidationMsgFromAPI(email);
-    if (emailErrMsg) {
-      return String(emailErrMsg);
+    const result = await emailValidationCheckAPI(email);
+    if (result) {
+      return String(result);
     }
   }
 };
 
-export async function emailValidationMsgFromAPI(email: string) {
-  try {
-    const postRequestOfCodeitAPI = await fetch(
-      "https://bootcamp-api.codeit.kr/api/check-email",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-        }),
-      }
-    );
-
-    if (!postRequestOfCodeitAPI.ok) {
-      const result = await postRequestOfCodeitAPI.json();
-      return result.error.message;
+export async function emailValidationCheckAPI(emailInput: string) {
+  const postRequestOfCodeitAPI = await fetch(
+    "https://bootcamp-api.codeit.kr/api/check-email",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailInput,
+      }),
     }
-  } catch (error) {
-    console.error(error);
+  );
+  const result = await postRequestOfCodeitAPI.json();
+  if (!postRequestOfCodeitAPI.ok) {
+    return result.error.message;
   }
 }
 
 //비밀번호 유효성 검사(로그인)
 export const validateSigninPasswordInput = (password: string) =>
-  !password ? PASSWORD_VALIDATION_TEXT.empty : "";
+  !password ? PASSWORD_VALIDATION_TEXT.EMPTY : "";
 
 //비밀번호 유효성 검사(회원가입)
 export const validateSignupPasswordInput = (password: string) => {
   if (!password) {
-    return PASSWORD_VALIDATION_TEXT.empty;
+    return PASSWORD_VALIDATION_TEXT.EMPTY;
   } else if (!isPasswordValid(password)) {
-    return PASSWORD_VALIDATION_TEXT.falsy;
+    return PASSWORD_VALIDATION_TEXT.FALSY;
   }
-  return "";
 };
 
 //비밀번호 확인 유효성 검사(회원가입)
@@ -77,7 +71,6 @@ export const validateSignupPasswordChkInput = (
   prevValue: string
 ) => {
   if (value !== prevValue) {
-    return PASSWORD_VALIDATION_TEXT.dismatch;
+    return PASSWORD_VALIDATION_TEXT.DISMATCH;
   }
-  return "";
 };

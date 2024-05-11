@@ -40,13 +40,13 @@ function Kebab({ linkUrl, onModal }: KebabButtonProps) {
       >
         <div
           className="flex items-center justify-center py-[7px] px-3 bg-white hover:bg-[#e7effb] hover:text-[#6d6afe]"
-          onClick={() => onModal(MODAL_TYPE.deleteLink, linkUrl)}
+          onClick={() => onModal(MODAL_TYPE.DELETE_LINK, linkUrl)}
         >
           삭제하기
         </div>
         <div
           className="flex items-center justify-center py-[7px] px-3 bg-white hover:bg-[#e7effb] hover:text-[#6d6afe]"
-          onClick={() => onModal(MODAL_TYPE.addFolder)}
+          onClick={() => onModal(MODAL_TYPE.ADD_FOLDER)}
         >
           폴더에 추가
         </div>
