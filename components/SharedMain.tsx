@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import SearchLinkInput from "./SearchLinkInput";
 import LinkContainer from "./LinkContainer";
 import useSearchInput from "@/util/hooks/useSearchInput";
-import { useUserData } from "@/util/ContextProvider";
-import { getSharedLinks } from "@/util/api";
-import { usePathname } from "next/navigation";
+import { getFolderListLink } from "@/util/api";
+import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEY } from "@/util/staticValue";
+import LinkContainerSkeleton from "./LinkContainerSkeleton";
 
 export interface SharedLinksApi {
   id: number;
@@ -18,11 +19,13 @@ export interface SharedLinksApi {
   folder_id: number;
 }
 
-const SharedMain = () => {
-  const pathname = usePathname();
-  const folderId = pathname.split("/shared/")[1];
-  const { user } = useUserData(true);
-  const [links, setLinks] = useState<SharedLinksApi[]>([]);
+const SharedMain = ({ folderId }: { folderId: string }) => {
+  const { data: links, isFetching } = useQuery<SharedLinksApi[]>({
+    queryKey: [QUERY_KEY.SHARED_LINK_LIST],
+    queryFn: () => getFolderListLink(Number(folderId)),
+    staleTime: 0,
+  });
+
   const {
     filterdItem,
     handleCloseClick,
@@ -31,19 +34,9 @@ const SharedMain = () => {
     inputValue,
     isFocus,
     closeButtonRef,
-  } = useSearchInput<SharedLinksApi>(links);
+  } = useSearchInput<SharedLinksApi>(links ?? []);
   const itemstoRender = inputValue ? filterdItem : links;
-  const hasItemsToRender = itemstoRender?.length;
-
-  const fetchLinkData = async () => {
-    const result = await getSharedLinks(user?.id as number, Number(folderId));
-    setLinks(result.data);
-  };
-  useEffect(() => {
-    if (user && user.id) {
-      fetchLinkData();
-    }
-  }, [user]);
+  const hasItemsToRender = itemstoRender?.length || 0;
 
   return (
     <>
@@ -57,8 +50,14 @@ const SharedMain = () => {
       />
       {hasItemsToRender > 0 ? (
         <div className="grid grid-cols-link-container gap-5 justify-center w-full">
-          {itemstoRender.map((item: SharedLinksApi) => (
+          {itemstoRender?.map((item: SharedLinksApi) => (
             <LinkContainer item={item} key={item.id} />
+          ))}
+        </div>
+      ) : isFetching ? (
+        <div className="grid grid-cols-link-container gap-5 justify-center w-full">
+          {[...Array(3)].map((_, index) => (
+            <LinkContainerSkeleton key={index} />
           ))}
         </div>
       ) : (

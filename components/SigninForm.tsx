@@ -13,7 +13,8 @@ import {
   validateSigninPasswordInput,
 } from "@/util/validation";
 import { useRouter } from "next/navigation";
-import { useUserData } from "@/util/ContextProvider";
+import { useUserData } from "@/util/contexts/UserDataProvider";
+import { useMutation } from "@tanstack/react-query";
 
 const SigninForm = () => {
   const { login } = useUserData();
@@ -21,11 +22,15 @@ const SigninForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     watch,
     clearErrors,
     setError,
   } = useForm();
+
+  const signinMutation = useMutation({
+    mutationFn: (loginData: FieldValues) => login(loginData),
+  });
 
   const [isEyeOn, setIsEyeOn] = useState(false);
 
@@ -72,12 +77,12 @@ const SigninForm = () => {
   };
 
   const onSubmit = async (data: FieldValues) => {
-    const result = await login(data);
+    const result = await signinMutation.mutateAsync(data);
     if (result) {
       router.push("/folder");
     } else {
-      handleEmailBlur(EMAIL_VALIDATION_TEXT.fail);
-      handlePasswordBlur(PASSWORD_VALIDATION_TEXT.fail);
+      handleEmailBlur(EMAIL_VALIDATION_TEXT.FAIL);
+      handlePasswordBlur(PASSWORD_VALIDATION_TEXT.FAIL);
     }
   };
 
@@ -88,14 +93,14 @@ const SigninForm = () => {
     >
       <div className="relative flex flex-col items-start gap-3">
         <label className="text-[14px] text-[#000]" htmlFor="email">
-          {INPUT_LABEL_TEXT.email}
+          {INPUT_LABEL_TEXT.EMAIL}
         </label>
         <input
           {...register("email", {
             validate: (value) => validateSigninEmailInput(value),
             onBlur: () => handleEmailBlur(),
           })}
-          placeholder={INPUT_SIGNIN_PLACEHOLDER_TEXT.email}
+          placeholder={INPUT_SIGNIN_PLACEHOLDER_TEXT.EMAIL}
           className={`${
             errors.email && `border-[#ff5b56] border-solid`
           }flex w-[400px] px-[15px] py-[18px] justify-center items-center rounded-[8px] border border-[#ccd5e3] border-solid text-[#000] focus:[outline:none] focus:border-[#6d6afe] 767px:[width:min(400px,100vw-65px)]`}
@@ -107,7 +112,7 @@ const SigninForm = () => {
       </div>
       <div className="relative flex flex-col items-start gap-3">
         <label className="text-[14px] text-[#000]" htmlFor="password">
-          {INPUT_LABEL_TEXT.password}
+          {INPUT_LABEL_TEXT.PASSWORD}
         </label>
         <i
           onClick={handleEyeClick}
@@ -120,10 +125,10 @@ const SigninForm = () => {
         />
         <input
           {...register("password", {
-            required: PASSWORD_VALIDATION_TEXT.empty,
+            required: PASSWORD_VALIDATION_TEXT.EMPTY,
             onBlur: () => handlePasswordBlur(),
           })}
-          placeholder={INPUT_SIGNIN_PLACEHOLDER_TEXT.password}
+          placeholder={INPUT_SIGNIN_PLACEHOLDER_TEXT.PASSWORD}
           className={`${
             errors.password && `border-[#ff5b56] border-solid`
           }flex w-[400px] px-[15px] py-[18px] justify-center items-center rounded-[8px] border border-[#ccd5e3] border-solid text-[#000] focus:[outline:none] focus:border-[#6d6afe] 767px:[width:min(400px,100vw-65px)]`}
@@ -134,10 +139,11 @@ const SigninForm = () => {
         </div>
       </div>
       <button
+        disabled={isSubmitting}
         type="submit"
         className="flex w-[400px] py-4 px-5 justify-center items-center gap-[10px] [border:0px] rounded-lg bg-gradient-to-r from-[0.12%] from-[#6d6afe] to-[101.84%] to-[#6ae3fe] text-lg font-semibold text-[#fff] 767px:[width:min(400px,100vw-65px)]"
       >
-        {BUTTON_TEXT.signin}
+        {BUTTON_TEXT.SIGNIN}
       </button>
     </form>
   );

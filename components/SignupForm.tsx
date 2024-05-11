@@ -14,7 +14,8 @@ import {
   validateSignupPasswordChkInput,
   validateSignupPasswordInput,
 } from "@/util/validation";
-import { useUserData } from "@/util/ContextProvider";
+import { useUserData } from "@/util/contexts/UserDataProvider";
+import { useMutation } from "@tanstack/react-query";
 
 const SignupForm = () => {
   const { signup } = useUserData();
@@ -29,6 +30,12 @@ const SignupForm = () => {
     getValues,
   } = useForm();
 
+  const signupMutation = useMutation({
+    mutationFn: (signupData: FieldValues) => signup(signupData),
+  });
+  const checkEmailMutation = useMutation({
+    mutationFn: (emailData: string) => validateSignupEmailInput(emailData),
+  });
   const [isPasswordEyeOn, setIsPasswordEyeOn] = useState(false);
   const [isPasswordCheckEyeOn, setIsPasswordCheckEyeOn] = useState(false);
 
@@ -40,7 +47,7 @@ const SignupForm = () => {
   };
 
   const handleEmailBlur = async () => {
-    const emailError = await validateSignupEmailInput(watch("email"));
+    const emailError = await checkEmailMutation.mutateAsync(watch("email"));
     if (emailError) {
       setError("email", {
         type: "custom",
@@ -79,27 +86,36 @@ const SignupForm = () => {
   };
 
   const onSubmit = async (data: FieldValues) => {
-    const result = await signup(data);
+    const signupData = {
+      email: data.email,
+      password: data.password,
+    };
+    const result = await signupMutation.mutateAsync(signupData);
     if (result) {
       router.push("/folder");
     }
   };
 
+  const onErrors = (errors: Object) => {
+    console.log(errors);
+  };
+
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, onErrors)}
       className="flex flex-col items-center gap-4"
     >
       <div className="relative flex flex-col items-start gap-3">
         <label className="text-[14px] text-[#000]" htmlFor="email">
-          {INPUT_LABEL_TEXT.email}
+          {INPUT_LABEL_TEXT.EMAIL}
         </label>
         <input
+          id="email"
           {...register("email", {
-            validate: (value) => validateSignupEmailInput(value),
+            validate: (value) => checkEmailMutation.mutateAsync(value),
             onBlur: () => handleEmailBlur(),
           })}
-          placeholder={INPUT_SIGNUP_PLACEHOLDER_TEXT.email}
+          placeholder={INPUT_SIGNUP_PLACEHOLDER_TEXT.EMAIL}
           className={`${
             errors.email && `border-[#ff5b56] border-solid`
           }flex w-[400px] px-[15px] py-[18px] justify-center items-center rounded-[8px] border border-[#ccd5e3] border-solid text-[#000] focus:[outline:none] focus:border-[#6d6afe] 767px:[width:min(400px,100vw-65px)]`}
@@ -111,7 +127,7 @@ const SignupForm = () => {
       </div>
       <div className="relative flex flex-col items-start gap-3">
         <label className="text-[14px] text-[#000]" htmlFor="password">
-          {INPUT_LABEL_TEXT.password}
+          {INPUT_LABEL_TEXT.PASSWORD}
         </label>
         <i
           onClick={handlePasswordEyeClick}
@@ -123,27 +139,28 @@ const SignupForm = () => {
           } hover:cursor-pointer`}
         />
         <input
+          id="password"
           {...register("password", {
             pattern: {
               value: /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/,
-              message: PASSWORD_VALIDATION_TEXT.falsy,
+              message: PASSWORD_VALIDATION_TEXT.FALSY,
             },
             validate: (value) => validateSignupPasswordInput(value),
             onBlur: () => handlePasswordBlur(),
           })}
-          placeholder={INPUT_SIGNUP_PLACEHOLDER_TEXT.password}
+          placeholder={INPUT_SIGNUP_PLACEHOLDER_TEXT.PASSWORD}
           className={`${
-            errors.password && `border-[#ff5b56] border-solid`
+            errors.password?.message && `border-[#ff5b56] border-solid`
           }flex w-[400px] px-[15px] py-[18px] justify-center items-center rounded-[8px] border border-[#ccd5e3] border-solid text-[#000] focus:[outline:none] focus:border-[#6d6afe] 767px:[width:min(400px,100vw-65px)]`}
           type={`${isPasswordEyeOn ? `text` : `password`}`}
         />
         <div className={`h-4 text-xs text-[#ff5b56]`}>
-          {errors.password && (errors.password.message as string)}
+          {errors.password?.message as string}
         </div>
       </div>
       <div className="relative flex flex-col items-start gap-3">
-        <label className="text-[14px] text-[#000]" htmlFor="password">
-          {INPUT_LABEL_TEXT.passwordCheck}
+        <label className="text-[14px] text-[#000]" htmlFor="passwordCheck">
+          {INPUT_LABEL_TEXT.PASSWORD_CHECK}
         </label>
         <i
           onClick={handlePasswordCheckEyeClick}
@@ -155,29 +172,30 @@ const SignupForm = () => {
           } hover:cursor-pointer`}
         />
         <input
+          id="passwordCheck"
           {...register("passwordCheck", {
-            required: PASSWORD_VALIDATION_TEXT.empty,
+            required: PASSWORD_VALIDATION_TEXT.EMPTY,
             validate: (value) =>
               value === getValues("password") ||
-              PASSWORD_VALIDATION_TEXT.dismatch,
+              PASSWORD_VALIDATION_TEXT.DISMATCH,
             onBlur: () => handlePasswordCheckBlur(),
           })}
-          placeholder={INPUT_SIGNUP_PLACEHOLDER_TEXT.passwordCheck}
+          placeholder={INPUT_SIGNUP_PLACEHOLDER_TEXT.PASSWORD_CHECK}
           className={`${
             errors.passwordCheck && `border-[#ff5b56] border-solid`
           }flex w-[400px] px-[15px] py-[18px] justify-center items-center rounded-[8px] border border-[#ccd5e3] border-solid text-[#000] focus:[outline:none] focus:border-[#6d6afe] 767px:[width:min(400px,100vw-65px)]`}
           type={`${isPasswordCheckEyeOn ? `text` : `password`}`}
         />
         <div className={`h-4 text-xs text-[#ff5b56]`}>
-          {errors.passwordCheck && (errors.passwordCheck.message as string)}
+          {errors.passwordCheck?.message as string}
         </div>
       </div>
       <button
         disabled={isSubmitting}
         type="submit"
-        className="flex w-[400px] py-4 px-5 justify-center items-center gap-[10px] [border:0px] rounded-lg bg-gradient-to-r from-[0.12%] from-[#6d6afe] to-[101.84%] to-[#6ae3fe] text-lg font-semibold text-[#fff] 767px:[width:min(400px,100vw-65px)]"
+        className={`flex w-[400px] py-4 px-5 justify-center items-center gap-[10px] [border:0px] rounded-lg bg-gradient-to-r from-[0.12%] from-[#6d6afe] to-[101.84%] to-[#6ae3fe] text-lg font-semibold text-[#fff] 767px:[width:min(400px,100vw-65px)]`}
       >
-        {BUTTON_TEXT.signup}
+        {BUTTON_TEXT.SIGNUP}
       </button>
     </form>
   );
