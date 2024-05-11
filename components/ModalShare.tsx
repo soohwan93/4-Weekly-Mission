@@ -6,7 +6,6 @@ import FacebookShare from "./FacebookShare";
 import CopyLinkButton from "./CopyLink";
 
 export interface ModalShareProps {
-  userId: number;
   folderName: string;
 }
 
