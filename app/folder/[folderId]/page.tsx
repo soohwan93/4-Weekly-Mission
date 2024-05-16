@@ -48,17 +48,14 @@ export interface OnModalProps {
 }
 
 const Folder = ({ params }: { params: { folderId: string } }) => {
-  const { data: folderListData } = useFolderQuery();
+  const { data: folders } = useFolderQuery();
 
   const { data: selectedFolderData, isPending: isSelectedFolderPending } =
     useQuery({
       queryKey: [QUERY_KEY.FOLDER_LINK_LIST, params.folderId],
       queryFn: () => getFolderListData(Number(params.folderId)),
-      staleTime: 0,
     });
-
-  const folders = folderListData ?? [];
-  const folderTitleName = folderListData?.filter(
+  const folderTitleName = folders?.filter(
     (folder: Folders) => folder.id === Number(params.folderId)
   )[0]?.name;
 
@@ -101,15 +98,15 @@ const Folder = ({ params }: { params: { folderId: string } }) => {
             <div>저장된 폴더가 없습니다</div>
           ) : (
             <>
-              {folders.length > 0 && (
+              {folders?.length > 0 && (
                 <>
                   <FolderButton
-                    folderList={folderListData}
+                    folderList={folders}
                     clickedButtonId={Number(params.folderId)}
                     onModal={handleModal}
                   />
                   <FolderTitle
-                    folders={folderListData}
+                    folders={folders}
                     folderId={Number(params.folderId)}
                     onModal={handleModal}
                   />
