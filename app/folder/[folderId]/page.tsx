@@ -1,11 +1,5 @@
 "use client";
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import useSearchInput, {
   SearchListApiProps,
 } from "@/util/hooks/useSearchInput";
@@ -13,7 +7,6 @@ import useSearchInput, {
 import { getFolderListData } from "@/util/api";
 import ModalPortal from "@/util/ModalPortal";
 import Modal from "@/components/Modal";
-import { handleButtonListItemClick } from "@/components/FolderButtonAll";
 import AddLinkInput from "@/components/AddLinkInput";
 import SearchLinkInput from "@/components/SearchLinkInput";
 import FolderTitle from "@/components/FolderTitle";
@@ -23,8 +16,11 @@ import ModalEdit from "@/components/ModalEdit";
 import ModalDeleteFolder from "@/components/ModalDeleteFolder";
 import ModalDeleteLink from "@/components/ModalDeleteLink";
 import ModalAddFolder from "@/components/ModalAddFolder";
-import { useUserData } from "@/util/ContextProvider";
+import type { Folders } from "@/util/contexts/UserDataProvider";
 import FolderButton from "@/components/FolderButton";
+import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEY } from "@/util/staticValue";
+import { useFolderQuery } from "@/util/hooks/useFolderQuery";
 
 export interface FolderListApiItem extends SearchListApiProps {
   id: number;
@@ -52,13 +48,22 @@ export interface OnModalProps {
 }
 
 const Folder = ({ params }: { params: { folderId: string } }) => {
-  const { user, folders } = useUserData(true);
-  const folderTitleName = folders?.filter(
-    (folder) => folder.id === Number(params.folderId)
+  const { data: folderListData } = useFolderQuery();
+
+  const { data: selectedFolderData, isPending: isSelectedFolderPending } =
+    useQuery({
+      queryKey: [QUERY_KEY.FOLDER_LINK_LIST, params.folderId],
+      queryFn: () => getFolderListData(Number(params.folderId)),
+      staleTime: 0,
+    });
+
+  const folders = folderListData ?? [];
+  const folderTitleName = folderListData?.filter(
+    (folder: Folders) => folder.id === Number(params.folderId)
   )[0]?.name;
 
   const footerTarget = useRef<HTMLDivElement>(null);
-  const [folderListItem, setFolderListItem] = useState<FolderListApiItem[]>([]);
+
   const {
     filterdItem,
     handleCloseClick,
@@ -67,34 +72,16 @@ const Folder = ({ params }: { params: { folderId: string } }) => {
     inputValue,
     isFocus,
     closeButtonRef,
-  } = useSearchInput<FolderListApiItem>(folderListItem);
+  } = useSearchInput<FolderListApiItem>(selectedFolderData);
   const [linkUrl, setLinkUrl] = useState("");
   const [isModal, setIsModal] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [isFolderListPending, setIsFolderListPending] = useState(true);
-  const handleButtonListItemClick: handleButtonListItemClick = useCallback(
-    async (id) => {
-      setIsFolderListPending(true);
-      const result = await getFolderListData(id);
-
-      if (!result) return;
-
-      const data = result.data?.folder;
-      setFolderListItem(data);
-      setIsFolderListPending(false);
-    },
-    []
-  );
 
   const handleModal = (type?: string, link?: string) => {
     setIsModal(!isModal);
     type && setModalType(type);
     link && setLinkUrl(link);
   };
-
-  useEffect(() => {
-    handleButtonListItemClick(Number(params.folderId));
-  }, [handleButtonListItemClick, params.folderId]);
 
   return (
     <>
@@ -110,27 +97,28 @@ const Folder = ({ params }: { params: { folderId: string } }) => {
             isFocus={isFocus}
           />
 
-          {folders.length === 0 ? (
+          {folders?.length === 0 ? (
             <div>저장된 폴더가 없습니다</div>
           ) : (
             <>
               {folders.length > 0 && (
                 <>
                   <FolderButton
-                    folderList={folders}
+                    folderList={folderListData}
                     clickedButtonId={Number(params.folderId)}
                     onModal={handleModal}
                   />
                   <FolderTitle
+                    folders={folderListData}
                     folderId={Number(params.folderId)}
                     onModal={handleModal}
                   />
                   <FolderListItem
                     filterdFolderListItem={filterdItem}
-                    folderListItem={folderListItem}
+                    folderListItem={selectedFolderData}
                     onModal={handleModal}
                     value={inputValue}
-                    isPending={isFolderListPending}
+                    isPending={isSelectedFolderPending}
                   />
                 </>
               )}
@@ -142,10 +130,7 @@ const Folder = ({ params }: { params: { folderId: string } }) => {
         <ModalPortal>
           <Modal onModal={handleModal}>
             {modalType === "share" && (
-              <ModalShare
-                folderName={folderTitleName}
-                userId={user?.id as number}
-              />
+              <ModalShare folderName={folderTitleName} />
             )}
             {modalType === "editFolder" && (
               <ModalEdit folderName={folderTitleName} />

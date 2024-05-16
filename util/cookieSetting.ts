@@ -1,4 +1,4 @@
-import { setCookie } from "nookies";
+import { setCookie, destroyCookie } from "nookies";
 
 export function getCookie(name: string): string | undefined {
   if (typeof window === "undefined") {
@@ -28,6 +28,8 @@ export function setAccessCookieToken(data: string) {
   setCookie(null, "accessToken", data, {
     maxAge: 60 * 60,
     path: "/",
+    secure: true,
+    sameSite: "strict",
   });
 }
 
@@ -35,5 +37,16 @@ export function setRefreshCookieToken(data: string) {
   setCookie(null, "refreshToken", data, {
     maxAge: 7 * 24 * 60 * 60,
     path: "/",
+    secure: true,
+    sameSite: "strict",
   });
+}
+
+export function removeAllCookieToken() {
+  deleteCookie("accessToken");
+  deleteCookie("refreshToken");
+}
+
+export function deleteCookie(name: string) {
+  destroyCookie(null, name, { path: "/" });
 }

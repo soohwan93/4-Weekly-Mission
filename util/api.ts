@@ -5,23 +5,11 @@ import {
   setAccessCookieToken,
   setRefreshCookieToken,
 } from "./cookieSetting";
+import { API } from "./staticValue";
 interface EmailObject {
   email: string;
 }
 
-const ERROR_MSG = "데이터 불러오기 실패";
-const REFRESH_ERROR_MSG = "다시 로그인 하세요";
-const checkLoginPossibleURL = "https://bootcamp-api.codeit.kr/api/sign-in";
-const checkEmailApiURL = "https://bootcamp-api.codeit.kr/api/check-email";
-const checkSignupPossibleURL = "https://bootcamp-api.codeit.kr/api/sign-up";
-const sharedUserSampleApiURL = "https://bootcamp-api.codeit.kr/api/users/1";
-const sharedUserApiURL = "https://bootcamp-api.codeit.kr/api/users";
-const sharedFolderSampleApiURL =
-  "https://bootcamp-api.codeit.kr/api/sample/folder";
-const sharedFolderApiURL = "https://bootcamp-api.codeit.kr/api/folders";
-const folderAllDataApiURL = "https://bootcamp-api.codeit.kr/api/links";
-const folderDataApiURL = "https://bootcamp-api.codeit.kr/api/links?folderId=";
-const refreshTokenApiURL = "https://bootcamp-api.codeit.kr/api/refresh-token";
 async function fetchWithToken(url: string, options: RequestInit = {}) {
   const headers = new Headers(options.headers as HeadersInit);
   const accessToken = getCookie("accessToken");
@@ -42,7 +30,7 @@ async function fetchWithToken(url: string, options: RequestInit = {}) {
   let response = await fetch(url, mergedOptions);
 
   if (response.status === 401) {
-    const refreshTokenResponse = await fetch(refreshTokenApiURL, {
+    const refreshTokenResponse = await fetch(API.URL.REFRESH_TOKEN, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -67,12 +55,12 @@ async function fetchWithToken(url: string, options: RequestInit = {}) {
 
       response = await fetch(url, updatedOptions);
     } else {
-      throw new Error(REFRESH_ERROR_MSG);
+      return new Error(API.MESSAGE.REFRESH);
     }
   }
 
   if (!response.ok) {
-    return new Error(ERROR_MSG);
+    return new Error(API.MESSAGE.COMMON);
   }
 
   return response.json();
@@ -91,47 +79,46 @@ async function postApiResponse(url: string, bodyData: Object) {
   return body;
 }
 
-export function getSharedUserSample() {
-  return getApiResponse(sharedUserSampleApiURL);
-}
 export function getSharedUser() {
-  return getApiResponse(sharedUserApiURL);
+  return getApiResponse(API.URL.USER_DATA);
 }
 
-export function getSharedFolderSample() {
-  return getApiResponse(sharedFolderSampleApiURL);
-}
-
-export function getSharedFolder() {
-  return getApiResponse(sharedFolderApiURL);
-}
-
-export function getSharedLinks(userId: number, folderId: number) {
-  return getApiResponse(
-    `https://bootcamp-api.codeit.kr/api/users/${userId}/links?folderId=${folderId}`
-  );
+export function getSharedUserById(userId: number) {
+  const requestUrl = API.URL.USER_DATA_FROM_USERID + userId;
+  return getApiResponse(requestUrl);
 }
 
 export function getFolderList() {
-  return getApiResponse(sharedFolderApiURL);
+  return getApiResponse(API.URL.SHARED_FOLDER);
+}
+export function getFolderListByFolderId(folderId: number) {
+  const requestUrl = API.URL.SHARED_FOLDER_LINK + folderId;
+  return getApiResponse(requestUrl);
 }
 
-export async function getFolderListData(id?: number) {
-  const requestUrl = id ? folderDataApiURL + id : folderAllDataApiURL;
+export function getFolderListLink(folderId: number) {
+  const requestUrl = `${API.URL.SHARED_FOLDER_LINK}${folderId}/links`;
+  return getApiResponse(requestUrl);
+}
+
+export async function getFolderListData(folderId?: number) {
+  const requestUrl = folderId
+    ? `${API.URL.SHARED_FOLDER_LINK}${folderId}/links`
+    : API.URL.FOLDER_ALL_DATA;
   return getApiResponse(requestUrl);
 }
 
 export function postLoginData(loginData: FieldValues) {
-  const requestUrl = checkLoginPossibleURL;
+  const requestUrl = API.URL.CHECK_LOGIN_POSSIBLE;
   return postApiResponse(requestUrl, loginData);
 }
 
 export function postSignupEmailValidationData(email: EmailObject) {
-  const requestUrl = checkEmailApiURL;
+  const requestUrl = API.URL.CHECK_EMAIL;
   return postApiResponse(requestUrl, email);
 }
 
 export function postSignupData(loginData: FieldValues) {
-  const requestUrl = checkSignupPossibleURL;
+  const requestUrl = API.URL.CHECK_SIGNUP_POSSIBLE;
   return postApiResponse(requestUrl, loginData);
 }

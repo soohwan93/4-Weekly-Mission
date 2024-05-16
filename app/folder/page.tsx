@@ -1,11 +1,5 @@
 "use client";
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import useSearchInput, {
   SearchListApiProps,
 } from "@/util/hooks/useSearchInput";
@@ -13,17 +7,16 @@ import useSearchInput, {
 import { getFolderListData } from "@/util/api";
 import ModalPortal from "@/util/ModalPortal";
 import Modal from "@/components/Modal";
-import FolderButtonAll, {
-  handleButtonListItemClick,
-} from "@/components/FolderButtonAll";
+import FolderButtonAll from "@/components/FolderButtonAll";
 import AddLinkInput from "@/components/AddLinkInput";
 import SearchLinkInput from "@/components/SearchLinkInput";
 import FolderListItem from "@/components/FolderListItem";
 import ModalDeleteLink from "@/components/ModalDeleteLink";
 import ModalAddFolder from "@/components/ModalAddFolder";
-import { useUserData } from "@/util/ContextProvider";
 import FolderTitleAll from "@/components/FolderTitleAll";
-import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEY } from "@/util/staticValue";
+import { useFolderQuery } from "@/util/hooks/useFolderQuery";
 
 export interface FolderListApiItem extends SearchListApiProps {
   id: number;
@@ -51,10 +44,15 @@ export interface OnModalProps {
 }
 
 const FolderAll = () => {
-  const { folders, isFolderPending } = useUserData(true);
-  const router = useRouter();
-  const footerTarget = useRef<HTMLDivElement>(null);
-  const [folderListItem, setFolderListItem] = useState<FolderListApiItem[]>([]);
+  const { data: sharedFolderData, isPending: isSharedFolderPending } =
+    useFolderQuery();
+
+  const { data: allLinksData, isPending: allLinksPending } = useQuery({
+    queryKey: [QUERY_KEY.FOLDER_ALL_LINK_LIST],
+    queryFn: () => getFolderListData(),
+    staleTime: 0,
+  });
+
   const {
     filterdItem,
     handleCloseClick,
@@ -63,29 +61,12 @@ const FolderAll = () => {
     inputValue,
     isFocus,
     closeButtonRef,
-  } = useSearchInput<FolderListApiItem>(folderListItem);
+  } = useSearchInput<FolderListApiItem>(allLinksData);
+
+  const footerTarget = useRef<HTMLDivElement>(null);
   const [linkUrl, setLinkUrl] = useState("");
   const [isModal, setIsModal] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [isFolderListPending, setIsFolderListPending] = useState(true);
-  const handleButtonListItemClick: handleButtonListItemClick = useCallback(
-    async (id) => {
-      setIsFolderListPending(true);
-      let result;
-      if (id) {
-        result = await getFolderListData(id);
-      } else {
-        result = await getFolderListData();
-      }
-
-      if (!result) return;
-
-      const data = result.data?.folder;
-      setFolderListItem(data);
-      setIsFolderListPending(false);
-    },
-    []
-  );
 
   const handleModal = (type?: string, link?: string) => {
     setIsModal(!isModal);
@@ -93,10 +74,7 @@ const FolderAll = () => {
     link && setLinkUrl(link);
   };
 
-  useEffect(() => {
-    handleButtonListItemClick();
-  }, [handleButtonListItemClick]);
-
+  const folders = sharedFolderData ?? [];
   return (
     <>
       <div className="flex flex-col items-center">
@@ -111,20 +89,20 @@ const FolderAll = () => {
             isFocus={isFocus}
           />
 
-          {!isFolderPending && folders.length === 0 ? (
+          {!isSharedFolderPending && folders?.length === 0 ? (
             <div>저장된 폴더가 없습니다</div>
           ) : (
             <>
-              {folders.length > 0 && (
+              {folders?.length > 0 && (
                 <>
                   <FolderButtonAll folderList={folders} onModal={handleModal} />
                   <FolderTitleAll />
                   <FolderListItem
                     filterdFolderListItem={filterdItem}
-                    folderListItem={folderListItem}
+                    folderListItem={allLinksData}
                     onModal={handleModal}
                     value={inputValue}
-                    isPending={isFolderListPending}
+                    isPending={allLinksPending}
                   />
                 </>
               )}
