@@ -1,12 +1,11 @@
 "use client";
 
-import type { Folders } from "@/util/contexts/UserDataProvider";
 import { useFolderQuery } from "@/util/hooks/useFolderQuery";
 import Link from "next/link";
+import { FolderType } from "../folder/page";
 
 const FolderList = () => {
-  const { data: sharedFolderData } = useFolderQuery();
-  const folders: Folders[] = sharedFolderData ?? undefined;
+  const { data: folders } = useFolderQuery();
   return (
     <>
       <div className="flex flex-col items-center">
@@ -14,7 +13,7 @@ const FolderList = () => {
           <>
             <h1 className="text-5xl mt-20">폴더를 선택하세요</h1>
             <ul>
-              {folders.map((item) => (
+              {folders.map((item: FolderType) => (
                 <Link
                   key={item.id}
                   className="text-3xl"
