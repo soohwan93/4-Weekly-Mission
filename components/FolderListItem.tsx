@@ -1,57 +1,83 @@
-import { OnModalProps } from "../app/folder/page";
-import FolderLinkConatiner from "./FolderLinkConatiner";
+"use client";
+import React from "react";
+import { FolderListApiItem, OnModalProps } from "../app/folder/page";
+import LinkContainerSkeleton from "./LinkContainerSkeleton";
+import FolderLinkContainer from "./FolderLinkContainer";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "@hello-pangea/dnd";
 
 export interface FolderListItemProps extends OnModalProps {
-  folderListItem: FolderListApiItem[];
-  filterdFolderListItem: FolderListApiItem[];
-  value: string;
+  filterdItem: FolderListApiItem[];
   isPending: boolean;
-}
-
-export interface FolderListApiItem extends SearchListProps {
-  id: number;
-  created_at: string;
-  updated_at: string;
-  image_source: string;
-  folder_id: string;
-}
-
-export interface SearchListProps {
-  url: string;
-  title: string;
-  description: string;
+  setFilterdItem: React.Dispatch<React.SetStateAction<FolderListApiItem[]>>;
 }
 
 function FolderListItem({
-  folderListItem,
   onModal,
-  filterdFolderListItem,
-  value,
+  filterdItem,
   isPending,
+  setFilterdItem,
 }: FolderListItemProps) {
-  const itemstoRender = value ? filterdFolderListItem : folderListItem;
-  const hasItemsToRender = itemstoRender && itemstoRender.length > 0;
+  const handleDragEnd = (result: DropResult) => {
+    console.log(result);
+    console.log(result.destination);
+    if (!result.destination) return;
+    const items = Array.from(filterdItem);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    console.log(items);
+    setFilterdItem(items);
+  };
+
+  if (isPending) {
+    return (
+      <div className="grid grid-cols-link-container gap-5 justify-center w-full">
+        {[...Array(3)].map((_, index) => (
+          <LinkContainerSkeleton key={`skeleton_${index}`} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <>
-      {hasItemsToRender ? (
-        <>
-          <div className="grid grid-cols-link-container gap-5 justify-center w-full">
-            {itemstoRender.map((item) => (
-              <FolderLinkConatiner
-                item={item}
-                key={item.id}
-                onModal={onModal}
-              />
-            ))}
-          </div>
-        </>
+      {filterdItem?.length > 0 ? (
+        <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
+          <Droppable droppableId="linkCards">
+            {(dropProvided) => (
+              <div
+                {...dropProvided.droppableProps}
+                ref={dropProvided.innerRef}
+                className="linkCards grid grid-cols-link-container gap-5 w-full"
+              >
+                {filterdItem.map((item, index) => (
+                  <Draggable
+                    key={String(item.id)}
+                    draggableId={String(item.id)}
+                    index={index}
+                  >
+                    {(dragProvided) => (
+                      <div
+                        {...dragProvided.draggableProps}
+                        {...dragProvided.dragHandleProps}
+                        ref={dragProvided.innerRef}
+                      >
+                        <FolderLinkContainer item={item} onModal={onModal} />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {dropProvided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       ) : (
-        <>
-          {!isPending && (
-            <div style={{ paddingBottom: `200px` }}>저장된 링크가 없습니다</div>
-          )}
-        </>
+        <div style={{ paddingBottom: "200px" }}>저장된 링크가 없습니다</div>
       )}
     </>
   );
