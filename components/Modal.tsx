@@ -1,37 +1,20 @@
 import stopPropagation from "@/util/stopPropagation";
-import closeImg from "@/public/modal-close.png";
 import { ModalProps } from "../app/folder/page";
+import { ModalContent } from "@/util/modal/ModalContent";
+import { ModalBackground } from "@/util/modal/ModalBackground";
+import { ModalContainer } from "@/util/modal/ModalContainer";
+import { ModalContentsWrapper } from "@/util/modal/ModalContentsWrapper";
 
-function Modal({ onModal, children }: ModalProps) {
+function Modal({ type, title, linkUrl, onModal }: ModalProps) {
   return (
     <>
-      <div
-        className="w-full h-full z-[100] fixed top-0 left-0"
-        style={{
-          backgroundColor: `rgba(0, 0, 0, 0.4)`,
-        }}
-        onClick={() => onModal()}
-      >
-        <div
-          className="absolute bg-white rounded-[10px]"
-          style={{
-            transform: `translate(-50%,-50%)`,
-            top: `50%`,
-            left: `50%`,
-          }}
-          onClick={stopPropagation}
-        >
-          <div className="flex [width:360px] items-center flex-col p-10 gap-[25px]">
-            <img
-              className="absolute right-[10px] top-[10px] w-[25px] h-[25px] hover:cursor-pointer"
-              onClick={() => onModal()}
-              src={closeImg.src}
-              alt="modal-close"
-            />
-            {children}
-          </div>
-        </div>
-      </div>
+      <ModalBackground onClick={() => onModal()}>
+        <ModalContainer onClick={stopPropagation}>
+          <ModalContentsWrapper onClick={() => onModal()}>
+            {ModalContent(type, title!, linkUrl)}
+          </ModalContentsWrapper>
+        </ModalContainer>
+      </ModalBackground>
     </>
   );
 }
