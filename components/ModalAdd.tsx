@@ -6,7 +6,6 @@ interface ModalAddProps {
   linkUrl: string;
 }
 function ModalAdd({ linkUrl }: ModalAddProps) {
-  //refactor: number 타입으로 나중에 다시 api를 통해 받아야할 것으로 보임. 현재는 임시 데이터라 ADD_DIV_ITEMS에 uuid 적용
   const [clickedItem, setClickedItem] = useState<string>("");
 
   const handleAddDivClick = (id: string) => {
