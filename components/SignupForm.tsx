@@ -14,7 +14,7 @@ import {
   validateSignupPasswordChkInput,
   validateSignupPasswordInput,
 } from "@/util/validation";
-import { useUserData } from "@/util/contexts/UserDataProvider";
+import { useUserData } from "@/util/contexts/UserProvider";
 import { useMutation } from "@tanstack/react-query";
 
 const SignupForm = () => {
