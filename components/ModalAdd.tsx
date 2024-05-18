@@ -2,8 +2,10 @@
 import { useState } from "react";
 import checkImg from "@/public/check.png";
 import { ADD_MODAL_ITEMS } from "@/util/staticValue";
-
-function ModalAdd() {
+interface ModalAddProps {
+  linkUrl: string;
+}
+function ModalAdd({ linkUrl }: ModalAddProps) {
   //refactor: number 타입으로 나중에 다시 api를 통해 받아야할 것으로 보임. 현재는 임시 데이터라 ADD_DIV_ITEMS에 uuid 적용
   const [clickedItem, setClickedItem] = useState<string>("");
 
@@ -15,7 +17,7 @@ function ModalAdd() {
     <>
       <div className="flex flex-col items-center gap-2">
         <div className="text-[20px] font-semibold">폴더에 추가</div>
-        <span className="text-sm text-[#9fa6b2]">링크 주소</span>
+        <span className="text-sm text-[#9fa6b2]">{linkUrl}</span>
       </div>
       <div className="flex flex-col w-full">
         {ADD_MODAL_ITEMS.map(({ id, title, subTitle }) => (
