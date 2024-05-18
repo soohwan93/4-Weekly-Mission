@@ -5,17 +5,17 @@ interface SearchLinkInputProps {
   inputValue: string;
   isFocus: boolean;
   closeButtonRef: React.RefObject<HTMLImageElement>;
-  handleInputClick: () => void;
-  handleCloseClick: () => void;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputClick: () => void;
+  onCloseClick: () => void;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 const SearchLinkInput = ({
-  handleInputClick,
-  handleInputChange,
+  onInputClick,
+  onInputChange,
   inputValue,
   isFocus,
   closeButtonRef,
-  handleCloseClick,
+  onCloseClick,
 }: SearchLinkInputProps) => {
   return (
     <div className="w-inherit relative">
@@ -29,15 +29,15 @@ const SearchLinkInput = ({
         id="searchLinkInput"
         type="text"
         placeholder="링크를 검색해 보세요"
-        onClick={handleInputClick}
-        onChange={handleInputChange}
+        onClick={onInputClick}
+        onChange={onInputChange}
         value={inputValue}
       />
       {isFocus && (
         <img
           className="absolute right-[10px] top-[18px] w-[25px] h-[25px] hover:cursor-pointer"
           ref={closeButtonRef}
-          onClick={handleCloseClick}
+          onClick={onCloseClick}
           src={closeImg.src}
           alt="modal-close"
         />
