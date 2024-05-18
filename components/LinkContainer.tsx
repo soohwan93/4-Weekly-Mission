@@ -1,9 +1,9 @@
 import noImage from "@/public/no-image.png";
 
-import { SharedLinksApi } from "./SharedMain";
 import { formatDate, formatDateRelative } from "@/util/formatDate";
+import { FolderListApiItem } from "@/app/folder/page";
 export interface LinkContainerProps {
-  item: SharedLinksApi;
+  item: FolderListApiItem;
 }
 function LinkContainer({ item }: LinkContainerProps) {
   return (
