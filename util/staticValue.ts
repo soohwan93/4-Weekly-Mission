@@ -1,22 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-const BASE_URL = "https://bootcamp-api.codeit.kr/api/linkbrary/v1";
-export const API = {
-  URL: {
-    CHECK_LOGIN_POSSIBLE: `${BASE_URL}/auth/sign-in`,
-    CHECK_EMAIL: `${BASE_URL}/users/check-email`,
-    CHECK_SIGNUP_POSSIBLE: `${BASE_URL}/auth/sign-up`,
-    USER_DATA: `${BASE_URL}/users`,
-    USER_DATA_FROM_USERID: `${BASE_URL}/users/`,
-    SHARED_FOLDER: `${BASE_URL}/folders`,
-    SHARED_FOLDER_LINK: `${BASE_URL}/folders/`,
-    FOLDER_ALL_DATA: `${BASE_URL}/links`,
-    REFRESH_TOKEN: `${BASE_URL}/auth/refresh-token`,
-  },
-  MESSAGE: {
-    COMMON: "데이터 불러오기 실패",
-    REFRESH: "다시 로그인 하세요",
-  },
-};
+export const BASE_URL = "https://bootcamp-api.codeit.kr/api/linkbrary/v1";
 
 export const INPUT_LABEL_TEXT = {
   EMAIL: "이메일",
@@ -158,7 +141,7 @@ export const MODAL_TYPE = {
   DELETE_FOLDER: "deleteFolder",
   DELETE_LINK: "deleteLink",
   ADD_FOLDER: "addFolder",
-  ADD: "add",
+  ADD_LINK: "addLink",
 };
 
 export const ALL_LIST_BUTTON_ID = 0;
