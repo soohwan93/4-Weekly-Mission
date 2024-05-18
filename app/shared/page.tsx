@@ -1,5 +1,4 @@
 "use client";
-
 import { useFolderQuery } from "@/util/hooks/useFolderQuery";
 import Link from "next/link";
 import { FolderType } from "../folder/page";

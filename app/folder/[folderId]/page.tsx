@@ -1,7 +1,6 @@
 "use client";
 import React, { ReactNode, useRef, useState } from "react";
 import useFilteredSearchResults from "@/util/hooks/useSearchInput";
-
 import { getFolderListData } from "@/util/api";
 import ModalPortal from "@/util/modal/ModalPortal";
 import Modal from "@/components/Modal";
