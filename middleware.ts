@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { API } from "./util/staticValue";
+import { BASE_URL } from "./util/staticValue";
 
 export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken");
@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
   // accessToken이 없고 refreshToken이 있는 경우
   if (!accessToken && !!refreshToken) {
     // refreshToken을 사용하여 새로운 accessToken을 발급받는 API 호출
-    const refreshTokenResponse = await fetch(API.URL.REFRESH_TOKEN, {
+    const refreshTokenResponse = await fetch(`${BASE_URL}/auth/refresh-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,5 +58,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/folder", "/shared", "/signin", "/signup"],
+  matcher: ["/folder/:path*", "/shared/:path*", "/signin", "/signup"],
 };
