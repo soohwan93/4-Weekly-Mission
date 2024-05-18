@@ -1,29 +1,37 @@
 "use client";
-import React, { ReactNode, useRef, useState } from "react";
-import useSearchInput, {
-  SearchListApiProps,
-} from "@/util/hooks/useSearchInput";
+import React, { useRef } from "react";
+import useFilteredSearchResults from "@/util/hooks/useSearchInput";
 
-import { getFolderListData } from "@/util/api";
-import ModalPortal from "@/util/ModalPortal";
+import { getFolderData } from "@/util/api";
+import ModalPortal from "@/util/modal/ModalPortal";
 import Modal from "@/components/Modal";
 import FolderButtonAll from "@/components/FolderButtonAll";
 import AddLinkInput from "@/components/AddLinkInput";
 import SearchLinkInput from "@/components/SearchLinkInput";
 import FolderListItem from "@/components/FolderListItem";
-import ModalDeleteLink from "@/components/ModalDeleteLink";
-import ModalAddFolder from "@/components/ModalAddFolder";
-import FolderTitleAll from "@/components/FolderTitleAll";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/util/staticValue";
 import { useFolderQuery } from "@/util/hooks/useFolderQuery";
+import { useModal } from "@/util/hooks/useModal";
+import FolderTitleWrapper from "@/components/FolderTitleArea";
+import FolderTitle from "@/components/FolderTitle";
 
-export interface FolderListApiItem extends SearchListApiProps {
+export interface FolderType {
+  id: number;
+  name: string;
+  favorite: boolean;
+  user_id: number;
+  created_at: string;
+}
+
+export interface FolderListApiItem {
   id: number;
   created_at: string;
-  updated_at: string;
   image_source: string;
-  folder_id: string;
+  favorite: boolean;
+  url: string;
+  description: string;
+  title: string;
 }
 
 export interface FolderListProps {
@@ -36,7 +44,9 @@ export interface FolderListProps {
 }
 
 export interface ModalProps extends OnModalProps {
-  children: ReactNode;
+  type: string;
+  title?: string;
+  linkUrl: string;
 }
 
 export interface OnModalProps {
@@ -44,14 +54,14 @@ export interface OnModalProps {
 }
 
 const FolderAll = () => {
-  const { data: sharedFolderData, isPending: isSharedFolderPending } =
-    useFolderQuery();
+  const { data: folders, isPending: isSharedFolderPending } = useFolderQuery();
 
-  const { data: allLinksData, isPending: allLinksPending } = useQuery({
+  const { data: allLinksData, isPending: isAllLinksPending } = useQuery({
     queryKey: [QUERY_KEY.FOLDER_ALL_LINK_LIST],
-    queryFn: () => getFolderListData(),
+    queryFn: getFolderData,
     staleTime: 0,
   });
+  console.log(allLinksData);
 
   const {
     filterdItem,
@@ -61,24 +71,17 @@ const FolderAll = () => {
     inputValue,
     isFocus,
     closeButtonRef,
-  } = useSearchInput<FolderListApiItem>(allLinksData);
+    setFilterdItem,
+  } = useFilteredSearchResults(allLinksData);
 
   const footerTarget = useRef<HTMLDivElement>(null);
-  const [linkUrl, setLinkUrl] = useState("");
-  const [isModal, setIsModal] = useState(false);
-  const [modalType, setModalType] = useState("");
 
-  const handleModal = (type?: string, link?: string) => {
-    setIsModal(!isModal);
-    type && setModalType(type);
-    link && setLinkUrl(link);
-  };
+  const { isModal, modalType, linkUrl, handleModal } = useModal();
 
-  const folders = sharedFolderData ?? [];
   return (
     <>
       <div className="flex flex-col items-center">
-        <AddLinkInput footerTarget={footerTarget} />
+        <AddLinkInput linkUrl={linkUrl} footerTarget={footerTarget} />
         <div className="flex flex-col items-center gap-10 py-10 max-w-[1060px] min-h-[1200px] w-full 1124px:px-8">
           <SearchLinkInput
             closeButtonRef={closeButtonRef}
@@ -93,31 +96,23 @@ const FolderAll = () => {
             <div>저장된 폴더가 없습니다</div>
           ) : (
             <>
-              {folders?.length > 0 && (
-                <>
-                  <FolderButtonAll folderList={folders} onModal={handleModal} />
-                  <FolderTitleAll />
-                  <FolderListItem
-                    filterdFolderListItem={filterdItem}
-                    folderListItem={allLinksData}
-                    onModal={handleModal}
-                    value={inputValue}
-                    isPending={allLinksPending}
-                  />
-                </>
-              )}
+              <FolderButtonAll folderList={folders} onModal={handleModal} />
+              <FolderTitleWrapper>
+                <FolderTitle>전체</FolderTitle>
+              </FolderTitleWrapper>
+              <FolderListItem
+                filterdItem={filterdItem}
+                onModal={handleModal}
+                isPending={isAllLinksPending}
+                setFilterdItem={setFilterdItem}
+              />
             </>
           )}
         </div>
       </div>
       {isModal && (
         <ModalPortal>
-          <Modal onModal={handleModal}>
-            {modalType === "deleteLink" && (
-              <ModalDeleteLink linkUrl={linkUrl} />
-            )}
-            {modalType === "addFolder" && <ModalAddFolder />}
-          </Modal>
+          <Modal type={modalType} linkUrl={linkUrl} onModal={handleModal} />
         </ModalPortal>
       )}
       <div ref={footerTarget} />
