@@ -1,8 +1,8 @@
 import React from "react";
-import SigninForm from "../../components/SigninForm";
-import SignHeader from "../../components/SignHeader";
+import SigninForm from "@/components/SigninForm";
+import SignHeader from "@/components/SignHeader";
 import { SIGNIN_TEXT } from "@/util/staticValue";
-import SignBanner from "../../components/SignBanner";
+import SignBanner from "@/components/SignBanner";
 
 const Signin = () => {
   return (
