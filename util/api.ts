@@ -1,5 +1,6 @@
 "use client";
 import { FieldValues } from "react-hook-form";
+
 import { getCookie } from "./cookieSetting";
 import { BASE_URL } from "./staticValue";
 interface Favorite {

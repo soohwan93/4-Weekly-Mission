@@ -55,7 +55,6 @@ export interface OnModalProps {
 
 const FolderAll = () => {
   const { data: folders, isPending: isSharedFolderPending } = useFolderQuery();
-
   const { data: allLinksData, isPending: isAllLinksPending } = useQuery({
     queryKey: [QUERY_KEY.FOLDER_ALL_LINK_LIST],
     queryFn: getFolderData,

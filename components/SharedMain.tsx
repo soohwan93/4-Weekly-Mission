@@ -49,6 +49,12 @@ const SharedMain = ({
             <LinkContainer item={item} key={item.id} />
           ))}
         </div>
+      ) : isFetching ? (
+        <div className="grid grid-cols-link-container gap-5 justify-center w-full">
+          {[...Array(3)].map((_, index) => (
+            <LinkContainerSkeleton key={index} />
+          ))}
+        </div>
       ) : (
         <div style={{ paddingBottom: `50px` }}>저장된 링크가 없습니다</div>
       )}
