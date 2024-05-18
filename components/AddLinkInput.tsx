@@ -1,21 +1,42 @@
 "use client";
 import Modal from "./Modal";
-import ModalPortal from "@/util/ModalPortal";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import ModalAdd from "./ModalAdd";
+import ModalPortal from "@/util/modal/ModalPortal";
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useModal } from "@/util/hooks/useModal";
+import { MODAL_TYPE } from "@/util/staticValue";
 
 const AddLinkInput = ({
   footerTarget,
 }: {
+  linkUrl: string;
   footerTarget: React.RefObject<HTMLDivElement>;
 }) => {
   const target = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState("");
   const [isAddLinkInputHide, setIsAddLinkInputHide] = useState<boolean>(false);
   const [isAddLinkInputHideFooter, setIsAddLinkInputHideFooter] =
     useState<boolean>(false);
-  const [isAdd, setIsAdd] = useState(false);
-  const handleAddModal = () => setIsAdd(!isAdd);
 
+  const { isModal, linkUrl, modalType, handleModal, setIsModal } = useModal();
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+  };
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleModal(MODAL_TYPE.ADD_LINK, inputValue);
+      setIsModal(!isModal);
+      inputRef.current?.blur();
+    }
+  };
   const handleIntersection = (
     entries: IntersectionObserverEntry[],
     setIsAddLinkInputHide: React.Dispatch<React.SetStateAction<boolean>>
@@ -87,22 +108,20 @@ const AddLinkInput = ({
             id="addLinkInput"
             type="text"
             placeholder="링크를 추가해 보세요"
+            onChange={handleChange}
+            value={inputValue}
+            onKeyDown={handleKeyDown}
+            ref={inputRef}
           />
           <button
             className="flex w-20 py-[10px] justify-center items-center gap-[10px] rounded-lg bg-gradient-to-r from-[0.12%] from-[#6d6afe] to-[101.84%] to-[#6ae3fe] [border:none] text-white absolute top-[15px] right-5 text-[14px]"
-            onClick={handleAddModal}
+            onClick={() => handleModal(MODAL_TYPE.ADD_LINK, inputValue)}
           >
             추가하기
           </button>
         </div>
       </div>
-      {isAdd && (
-        <ModalPortal>
-          <Modal onModal={handleAddModal}>
-            <ModalAdd />
-          </Modal>
-        </ModalPortal>
-      )}
+
       {isAddLinkInputHideFooter && isAddLinkInputHide && (
         <div
           className={`flex flex-col items-center bg-[#f0f6ff] py-[24px] w-full ${
@@ -115,23 +134,24 @@ const AddLinkInput = ({
               id="addLinkInput"
               type="text"
               placeholder="링크를 추가해 보세요"
+              onChange={handleChange}
+              value={inputValue}
+              onKeyDown={handleKeyDown}
+              ref={inputRef}
             />
             <button
               className="flex w-20 py-[10px] justify-center items-center gap-[10px] rounded-lg bg-gradient-to-r from-[0.12%] from-[#6d6afe] to-[101.84%] to-[#6ae3fe] [border:none] text-white absolute top-4 right-5 text-[14px]"
-              onClick={handleAddModal}
+              onClick={() => handleModal(MODAL_TYPE.ADD_LINK, inputValue)}
             >
               추가하기
             </button>
           </div>
-
-          {isAdd && (
-            <ModalPortal>
-              <Modal onModal={handleAddModal}>
-                <ModalAdd />
-              </Modal>
-            </ModalPortal>
-          )}
         </div>
+      )}
+      {isModal && (
+        <ModalPortal>
+          <Modal type={modalType} linkUrl={linkUrl} onModal={handleModal} />
+        </ModalPortal>
       )}
     </>
   );
