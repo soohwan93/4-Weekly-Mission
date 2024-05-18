@@ -1,63 +1,52 @@
-"use client";
 import React from "react";
 import SearchLinkInput from "./SearchLinkInput";
 import LinkContainer from "./LinkContainer";
-import useSearchInput from "@/util/hooks/useSearchInput";
-import { getFolderListLink } from "@/util/api";
-import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEY } from "@/util/staticValue";
 import LinkContainerSkeleton from "./LinkContainerSkeleton";
+import { FolderListApiItem } from "@/app/folder/page";
 
-export interface SharedLinksApi {
-  id: number;
-  created_at: string;
-  updated_at: string | boolean;
-  url: string;
-  title: string;
-  description: string;
-  image_source: string;
-  folder_id: number;
+interface SharedMainProps {
+  closeButtonRef: React.RefObject<HTMLImageElement>;
+  onCloseClick: () => void;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputClick: () => void;
+  inputValue: string;
+  isFocus: boolean;
+  hasItemsToRender: number;
+  itemstoRender: FolderListApiItem[] | undefined;
+  isFetching: boolean;
 }
-
-const SharedMain = ({ folderId }: { folderId: string }) => {
-  const { data: links, isFetching } = useQuery<SharedLinksApi[]>({
-    queryKey: [QUERY_KEY.SHARED_LINK_LIST],
-    queryFn: () => getFolderListLink(Number(folderId)),
-    staleTime: 0,
-  });
-
-  const {
-    filterdItem,
-    handleCloseClick,
-    handleInputChange,
-    handleInputClick,
-    inputValue,
-    isFocus,
-    closeButtonRef,
-  } = useSearchInput<SharedLinksApi>(links ?? []);
-  const itemstoRender = inputValue ? filterdItem : links;
-  const hasItemsToRender = itemstoRender?.length || 0;
-
+const SharedMain = ({
+  closeButtonRef,
+  onCloseClick,
+  onInputChange,
+  onInputClick,
+  inputValue,
+  isFocus,
+  hasItemsToRender,
+  itemstoRender,
+  isFetching,
+}: SharedMainProps) => {
   return (
     <>
       <SearchLinkInput
         closeButtonRef={closeButtonRef}
-        handleCloseClick={handleCloseClick}
-        handleInputChange={handleInputChange}
-        handleInputClick={handleInputClick}
+        onCloseClick={onCloseClick}
+        onInputChange={onInputChange}
+        onInputClick={onInputClick}
         inputValue={inputValue}
         isFocus={isFocus}
       />
-      {hasItemsToRender > 0 ? (
-        <div className="grid grid-cols-link-container gap-5 justify-center w-full">
-          {itemstoRender?.map((item: SharedLinksApi) => (
-            <LinkContainer item={item} key={item.id} />
-          ))}
-        </div>
-      ) : isFetching ? (
+      {isFetching && (
         <div className="grid grid-cols-link-container gap-5 justify-center w-full">
           {[...Array(3)].map((_, index) => (
-            <LinkContainerSkeleton key={index} />
+            <LinkContainerSkeleton key={`skeleton_${index}`} />
+          ))}
+        </div>
+      )}
+      {hasItemsToRender > 0 ? (
+        <div className="grid grid-cols-link-container gap-5 justify-center w-full">
+          {itemstoRender?.map((item: FolderListApiItem) => (
+            <LinkContainer item={item} key={item.id} />
           ))}
         </div>
       ) : (
