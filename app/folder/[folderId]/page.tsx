@@ -63,9 +63,9 @@ const Folder = ({ params }: { params: { folderId: string } }) => {
         <div className="flex flex-col items-center gap-10 py-10 max-w-[1060px] min-h-[1200px] w-full 1124px:px-8">
           <SearchLinkInput
             closeButtonRef={closeButtonRef}
-            handleCloseClick={handleCloseClick}
-            handleInputChange={handleInputChange}
-            handleInputClick={handleInputClick}
+            onCloseClick={handleCloseClick}
+            onInputChange={handleInputChange}
+            onInputClick={handleInputClick}
             inputValue={inputValue}
             isFocus={isFocus}
           />
