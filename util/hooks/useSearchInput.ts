@@ -1,16 +1,12 @@
+import { FolderListApiItem } from "@/app/folder/page";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
-export interface SearchListApiProps {
-  url: string;
-  title: string;
-  description: string;
-}
-
-function useSearchInput<T extends SearchListApiProps>(item: T[]) {
+function useFilteredSearchResults(item: FolderListApiItem[]) {
   const closeButtonRef = useRef<HTMLImageElement>(null);
-  const [inputValue, setInputValue] = useState<string>("");
-  const [filterdItem, setFilterdItem] = useState<T[]>([]);
-  const [isFocus, setIsfocus] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState("");
+  const [filterdItem, setFilterdItem] = useState<FolderListApiItem[]>([]);
+  const [isFocus, setIsfocus] = useState(false);
+  const itemstoRender = inputValue ? filterdItem : item;
 
   const handleCloseClick = () => {
     setInputValue("");
@@ -48,13 +44,14 @@ function useSearchInput<T extends SearchListApiProps>(item: T[]) {
 
   return {
     inputValue,
-    filterdItem,
+    filterdItem: itemstoRender,
     isFocus,
     handleCloseClick,
     handleInputClick,
     handleInputChange,
     closeButtonRef,
+    setFilterdItem,
   };
 }
 
-export default useSearchInput;
+export default useFilteredSearchResults;
